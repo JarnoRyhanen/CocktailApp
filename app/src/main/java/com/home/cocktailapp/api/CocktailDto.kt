@@ -1,0 +1,42 @@
+package com.home.cocktailapp.api
+
+data class CocktailDto(
+    private val idDrink: String,
+    private val strDrink: String,
+    private val strInstructions: String,
+    private val strDrinkThumb: String,
+    private val category: String,
+    private val strAlcoholic: String,
+
+    private val strIngredient1: String,
+    private val strIngredient2: String?,
+    private val strIngredient3: String?,
+    private val strIngredient4: String?,
+    private val strIngredient5: String?,
+    private val strIngredient6: String?,
+    private val strIngredient7: String?,
+    private val strIngredient8: String?,
+    private val strIngredient9: String?,
+    private val strIngredient10: String?,
+    private val strIngredient11: String?,
+    private val strIngredient12: String?,
+    private val strIngredient13: String?,
+    private val strIngredient14: String?,
+    private val strIngredient15: String?,
+
+    private val strMeasure1: String,
+    private val strMeasure2: String?,
+    private val strMeasure3: String?,
+    private val strMeasure4: String?,
+    private val strMeasure5: String?,
+    private val strMeasure6: String?,
+    private val strMeasure7: String?,
+    private val strMeasure8: String?,
+    private val strMeasure9: String?,
+    private val strMeasure10: String?,
+    private val strMeasure11: String?,
+    private val strMeasure12: String?,
+    private val strMeasure13: String?,
+    private val strMeasure14: String?,
+    private val strMeasure15: String?
+)

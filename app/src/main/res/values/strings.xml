@@ -3,4 +3,6 @@
     <string name="search">Search</string>
     <string name="favorites">Favorites</string>
     <string name="home">Home</string>
+    <string name="results_could_not_be_loaded">Results could not be loaded</string>
+    <string name="no_results_found">No results found</string>
 </resources>

@@ -7,12 +7,12 @@ import androidx.room.PrimaryKey
 data class Cocktails(
     @PrimaryKey val cocktailId: String,
     val drinkName: String,
-    val drinkInstructions: String,
-    val drinkImageUrl: String,
-    val drinkCategory: String,
+    val drinkInstructions: String?,
+    val drinkImageUrl: String?,
+    val drinkCategory: String?,
 
-    val isAlcoholic: Boolean,
-    val isFavourited: Boolean,
+    val isAlcoholic: Boolean?,
+    val isFavourited: Boolean?,
 
     val drinkIngredient1: String,
     val drinkIngredient2: String?,

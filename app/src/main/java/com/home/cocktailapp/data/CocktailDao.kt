@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface CocktailDao {
 
-    @Query("SELECT * FROM most_popular_drinks INNER JOIN cocktails ON drinkId = id")
+    @Query("SELECT * FROM most_popular_drinks INNER JOIN cocktails ON cocktailId = drinkId")
     fun getAllPopularDrinks(): Flow<List<Cocktails>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

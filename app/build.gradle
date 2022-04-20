@@ -78,9 +78,6 @@ dependencies {
     implementation "com.google.dagger:hilt-android:$hiltVersion"
     kapt "com.google.dagger:hilt-android-compiler:$hiltVersion"
 
-    // Paging 3
-    implementation "androidx.paging:paging-runtime-ktx:$pagingVersion"
-
     // Glide
     implementation "com.github.bumptech.glide:glide:$glideVersion"
     kapt 'com.github.bumptech.glide:compiler:4.7.1'

@@ -3,6 +3,7 @@ package com.home.cocktailapp.api
 import com.home.cocktailapp.BuildConfig
 import retrofit2.http.GET
 import retrofit2.http.Headers
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface CocktailApi {
@@ -12,23 +13,19 @@ interface CocktailApi {
         const val API_KEY = BuildConfig.COCKTAIL_API_KEY
     }
 
-    // Popular returns full drink details
+    //  returns full drink details
     @Headers("X-RapidAPI-Host: the-cocktail-db.p.rapidapi.com", "X-RapidAPI-Key: $API_KEY")
-    @GET("popular.php")
-    suspend fun getPopularDrinks(): CocktailResponse
-
-
-    //Latest returns full drink details
-    @Headers("X-RapidAPI-Host: the-cocktail-db.p.rapidapi.com", "X-RapidAPI-Key: $API_KEY")
-    @GET("latest.php")
-    suspend fun getLatestDrinks(): CocktailResponse
+    @GET("{query}.php")
+    suspend fun getDrinksByQuery(
+        @Path("query") query: String
+    ): CocktailResponse
 
     // search drinks returns full drink details
     @Headers("X-RapidAPI-Host: the-cocktail-db.p.rapidapi.com", "X-RapidAPI-Key: $API_KEY")
     @GET("search.php")
     suspend fun searchDrinks(
         @Query("s") query: String
-    ) : CocktailResponse
+    ): CocktailResponse
 
     // search ingredient info returns full ingredient details
     @Headers("X-RapidAPI-Host: the-cocktail-db.p.rapidapi.com", "X-RapidAPI-Key: $API_KEY")
@@ -44,10 +41,5 @@ interface CocktailApi {
     suspend fun searchDrinksByIngredient(
         @Query("i") query: String
     ): CocktailResponse
-
-    // random selection returns full drink details
-    @Headers("X-RapidAPI-Host: the-cocktail-db.p.rapidapi.com", "X-RapidAPI-Key: $API_KEY")
-    @GET("randomselection.php")
-    suspend fun getRandomDrinks(): CocktailResponse
 
 }

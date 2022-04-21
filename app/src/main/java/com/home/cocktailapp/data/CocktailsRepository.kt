@@ -12,7 +12,8 @@ class CocktailsRepository @Inject constructor(
     private val cocktailDao = database.cocktailDao()
 
     suspend fun getMostPopularDrinks(): List<Cocktails> {
-        val response = api.getPopularDrinks()
+        //query parameters: popular.php latest.php and randomselection.php
+        val response = api.getDrinksByQuery("randomselection")
         val serverCocktails = response.drinks
 
         val mostPopularCocktails = serverCocktails.map { serverCocktail ->

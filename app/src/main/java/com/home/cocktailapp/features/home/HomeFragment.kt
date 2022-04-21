@@ -30,8 +30,19 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 setHasFixedSize(true)
             }
             viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-                viewModel.mostPopularCocktails.collect { cocktails ->
-                    cocktailAdapter.submitList(cocktails)
+                viewModel.drinksByQuery.collect {
+                    val result = it ?: return@collect
+
+                    swipeRefreshLayout.isRefreshing = result is Resource.Loading
+                    recyclerView.isVisible = !result.data.isNullOrEmpty()
+                    textViewError.isVisible = result.error != null && result.data.isNullOrEmpty()
+                    textViewError.text = getString(
+                        R.string.could_not_refresh,
+                        result.error?.localizedMessage ?: getString(R.string.unknown_error_occured)
+                    )
+                    buttonRetry.isVisible = result.error != null && result.data.isNullOrEmpty()
+
+                    cocktailAdapter.submitList(result.data)
                 }
             }
         }

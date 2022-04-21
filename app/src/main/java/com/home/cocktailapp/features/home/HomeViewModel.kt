@@ -17,6 +17,8 @@ class HomeViewModel @Inject constructor(
 
     private val mostPopularCocktailsFlow = MutableStateFlow<List<Cocktails>>(emptyList())
     val mostPopularCocktails: Flow<List<Cocktails>> = mostPopularCocktailsFlow
+    val drinksByQuery = repository.getDrinksByQuery("popular")
+        .stateIn(viewModelScope, SharingStarted.Lazily, null)
 
     init {
         viewModelScope.launch {

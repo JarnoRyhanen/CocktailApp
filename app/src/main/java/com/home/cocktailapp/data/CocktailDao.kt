@@ -16,7 +16,7 @@ interface CocktailDao {
     suspend fun insertCocktails(cocktails: List<Cocktails>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertMostPopularDrinks(cocktails: List<Cocktails>)
+    suspend fun insertMostPopularDrinks(cocktails: List<MostPopularDrinks>)
 
     @Query("DELETE FROM most_popular_drinks")
     suspend fun deleteAllPopularDrinks()

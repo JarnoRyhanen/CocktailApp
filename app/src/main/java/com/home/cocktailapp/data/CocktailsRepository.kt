@@ -4,10 +4,15 @@ import android.util.Log
 import androidx.room.withTransaction
 import com.home.cocktailapp.api.CocktailApi
 import com.home.cocktailapp.util.Resource
+import com.home.cocktailapp.util.exhaustive
 import com.home.cocktailapp.util.networkBoundResource
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.cancellable
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
+import retrofit2.HttpException
+import java.io.IOException
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
@@ -21,7 +26,10 @@ class CocktailsRepository @Inject constructor(
     private val cocktailDao = database.cocktailDao()
 
     fun getDrinksByQuery(
-        preferencesFlow: Flow<FilterPreferences>
+        forceRefresh: Boolean,
+        preferencesFlow: Flow<FilterPreferences>,
+        onFetchFailed: (Throwable) -> Unit,
+        onFetchSuccess: () -> Unit
     ): Flow<Resource<List<Cocktails>>> =
         networkBoundResource(
             query = {
@@ -96,6 +104,26 @@ class CocktailsRepository @Inject constructor(
                         filteredDrinks
                     )
                 }
-            }
+            },
+            shouldFetch =  { cachedCocktails ->
+                if (forceRefresh) {
+                    true
+                } else {
+                    val sortedCocktails = cachedCocktails.sortedBy { cocktail ->
+                        cocktail.timeStamp
+                    }
+                    val oldestTimeStamp = sortedCocktails.firstOrNull()?.timeStamp
+                    val needsRefresh = oldestTimeStamp == null ||
+                            oldestTimeStamp < System.currentTimeMillis() - TimeUnit.HOURS.toMillis(1)
+                    needsRefresh
+                }
+            },
+            onFetchFailed = { t ->
+                if (t !is HttpException && t !is IOException) {
+                    throw t
+                }
+                onFetchFailed(t)
+            },
+            onFetchSuccess = onFetchSuccess
         )
 }

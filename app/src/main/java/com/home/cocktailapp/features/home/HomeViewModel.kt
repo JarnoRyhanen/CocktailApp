@@ -5,9 +5,12 @@ import androidx.lifecycle.viewModelScope
 import com.home.cocktailapp.data.CocktailFilter
 import com.home.cocktailapp.data.CocktailsRepository
 import com.home.cocktailapp.data.PreferencesManager
+import com.home.cocktailapp.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -20,10 +23,52 @@ class HomeViewModel @Inject constructor(
 
     private val preferencesFlow = preferencesManager.preferencesFlow
 
-    val drinksByQuery = repository.getDrinksByQuery(preferencesFlow)
-        .stateIn(viewModelScope, SharingStarted.Lazily, null)
+    private val eventChannel = Channel<Event>()
+    val events = eventChannel.receiveAsFlow()
+
+    private val refreshTriggerChannel = Channel<Refresh>()
+    private val refreshTrigger = refreshTriggerChannel.receiveAsFlow()
+
+    var pendingScrollToTopAfterRefresh = false
+
+    val drinksByQuery = refreshTrigger.flatMapLatest { refresh ->
+        repository.getDrinksByQuery(
+            refresh == Refresh.FORCE,
+            preferencesFlow,
+            onFetchFailed = { t ->
+                viewModelScope.launch { eventChannel.send((Event.ShowErrorMessage(t))) }
+            },
+            onFetchSuccess = {
+                pendingScrollToTopAfterRefresh = true
+            })
+    }.stateIn(viewModelScope, SharingStarted.Lazily, null)
 
     fun onFilterItemSelected(cocktailFilter: CocktailFilter) = viewModelScope.launch {
         preferencesManager.updateCocktailFilter(cocktailFilter)
     }
+
+    fun normalRefresh() {
+        if (drinksByQuery.value !is Resource.Loading) {
+            viewModelScope.launch {
+                refreshTriggerChannel.send(Refresh.NORMAL)
+            }
+        }
+    }
+
+    fun onManualRefresh() {
+        if (drinksByQuery.value !is Resource.Loading) {
+            viewModelScope.launch {
+                refreshTriggerChannel.send(Refresh.FORCE)
+            }
+        }
+    }
+
+    enum class Refresh {
+        FORCE, NORMAL
+    }
+
+    sealed class Event {
+        data class ShowErrorMessage(val error: Throwable) : Event()
+    }
+
 }

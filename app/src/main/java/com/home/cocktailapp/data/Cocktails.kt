@@ -13,8 +13,9 @@ data class Cocktails(
 
     val isAlcoholic: Boolean?,
     val isFavourited: Boolean?,
+    val timeStamp: Long = System.currentTimeMillis(),
 
-    val drinkIngredient1: String,
+    val drinkIngredient1: String?,
     val drinkIngredient2: String?,
     val drinkIngredient3: String?,
     val drinkIngredient4: String?,
@@ -30,7 +31,7 @@ data class Cocktails(
     val drinkIngredient14: String?,
     val drinkIngredient15: String?,
 
-    val drinkMeasure1: String,
+    val drinkMeasure1: String?,
     val drinkMeasure2: String?,
     val drinkMeasure3: String?,
     val drinkMeasure4: String?,

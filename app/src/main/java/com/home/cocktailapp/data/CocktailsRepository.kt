@@ -80,10 +80,7 @@ class CocktailsRepository @Inject constructor(
                     )
                 }
 
-                // TODO: clean up 
-
                 val filteredDrinks = serverCocktails.map { cocktail ->
-                    Log.d(TAG, "filtered: ${preferencesFlow.first().cocktailFilter.name.lowercase()}")
                     when (preferencesFlow.first().cocktailFilter.name.lowercase()) {
                         "latest" -> LatestCocktails(drinkId = cocktail.idDrink)
                         "popular" -> PopularCocktails(drinkId = cocktail.idDrink)
@@ -91,32 +88,13 @@ class CocktailsRepository @Inject constructor(
                         else -> {}
                     }
                 }
-                when (preferencesFlow.first().cocktailFilter.name.lowercase()) {
-                    "latest" -> {
-                        Log.d(TAG, "latest")
-                        database.withTransaction {
-                            cocktailDao.deleteLatestCocktails()
-                            cocktailDao.insertCocktails(cocktails)
-                            cocktailDao.insertLatestCocktails(filteredDrinks as List<LatestCocktails>)
-                        }
-                    }
 
-                    "popular" -> {
-                        Log.d(TAG, "popular")
-                        database.withTransaction {
-                            cocktailDao.deletePopularDrinks()
-                            cocktailDao.insertCocktails(cocktails)
-                            cocktailDao.insertPopularCocktails(filteredDrinks as List<PopularCocktails>)
-                        }
-                    }
-                    "randomselection" -> {
-                        Log.d(TAG, "randon´m")
-                        database.withTransaction {
-                            cocktailDao.deleteRandomizedCocktails()
-                            cocktailDao.insertCocktails(cocktails)
-                            cocktailDao.insertRandomizedCocktails(filteredDrinks as List<RandomCocktails>)
-                        }
-                    }
+                database.withTransaction {
+                    cocktailDao.insertCocktails(cocktails)
+                    cocktailDao.insertFilteredDrinks(
+                        preferencesFlow.first().cocktailFilter,
+                        filteredDrinks
+                    )
                 }
             }
         )

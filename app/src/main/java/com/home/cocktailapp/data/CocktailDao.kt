@@ -4,7 +4,6 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.home.cocktailapp.features.home.HomeViewModel
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -15,6 +14,24 @@ interface CocktailDao {
             CocktailFilter.POPULAR -> getDrinksFilteredByPopularity()
             CocktailFilter.LATEST -> getDrinksFilteredByLatest()
             CocktailFilter.RANDOMSELECTION -> getDrinksFilteredByRandom()
+        }
+
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertFilteredDrinks(filter: CocktailFilter, cocktails: List<Any>) =
+        when (filter) {
+            CocktailFilter.POPULAR -> {
+                deletePopularCocktails()
+                insertPopularCocktails(cocktails as List<PopularCocktails>)
+            }
+            CocktailFilter.LATEST -> {
+                deleteLatestCocktails()
+                insertLatestCocktails(cocktails as List<LatestCocktails>)
+            }
+            CocktailFilter.RANDOMSELECTION -> {
+                deleteRandomizedCocktails()
+                insertRandomizedCocktails(cocktails as List<RandomCocktails>)
+            }
         }
 
     @Query("SELECT * FROM popular_cocktails INNER JOIN cocktails ON cocktailId = drinkId")
@@ -33,7 +50,7 @@ interface CocktailDao {
     suspend fun insertPopularCocktails(cocktails: List<PopularCocktails>)
 
     @Query("DELETE FROM popular_cocktails")
-    suspend fun deletePopularDrinks()
+    suspend fun deletePopularCocktails()
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertRandomizedCocktails(cocktails: List<RandomCocktails>)

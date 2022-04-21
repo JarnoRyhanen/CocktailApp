@@ -1,12 +1,17 @@
 package com.home.cocktailapp.data
 
+import android.util.Log
 import androidx.room.withTransaction
 import com.home.cocktailapp.api.CocktailApi
 import com.home.cocktailapp.util.Resource
 import com.home.cocktailapp.util.networkBoundResource
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMapLatest
 import javax.inject.Inject
 
+
+private const val TAG = "CocktailsRepository"
 
 class CocktailsRepository @Inject constructor(
     private val api: CocktailApi,
@@ -15,14 +20,18 @@ class CocktailsRepository @Inject constructor(
 
     private val cocktailDao = database.cocktailDao()
 
-    fun getDrinksByQuery(query: String): Flow<Resource<List<Cocktails>>> =
+    fun getDrinksByQuery(
+        preferencesFlow: Flow<FilterPreferences>
+    ): Flow<Resource<List<Cocktails>>> =
         networkBoundResource(
             query = {
-                // todo for time being this will return popular drinks, change later
-                cocktailDao.getAllPopularDrinks()
+                val drinksByQuery = preferencesFlow.flatMapLatest { filterPreference ->
+                    cocktailDao.getDrinks(filterPreference.cocktailFilter)
+                }
+                drinksByQuery
             },
             fetch = {
-                val response = api.getDrinksByQuery(query)
+                val response = api.getDrinksByQuery(preferencesFlow.first().cocktailFilter.name.lowercase())
                 response.drinks
             },
             saveFetchResult = { serverCocktails ->
@@ -71,16 +80,44 @@ class CocktailsRepository @Inject constructor(
                     )
                 }
 
-                val popularCocktails = serverCocktails.map { cocktail ->
-                    MostPopularDrinks(drinkId = cocktail.idDrink)
+                // TODO: clean up 
+
+                val filteredDrinks = serverCocktails.map { cocktail ->
+                    Log.d(TAG, "filtered: ${preferencesFlow.first().cocktailFilter.name.lowercase()}")
+                    when (preferencesFlow.first().cocktailFilter.name.lowercase()) {
+                        "latest" -> LatestCocktails(drinkId = cocktail.idDrink)
+                        "popular" -> PopularCocktails(drinkId = cocktail.idDrink)
+                        "randomselection" -> RandomCocktails(drinkId = cocktail.idDrink)
+                        else -> {}
+                    }
                 }
-                database.withTransaction {
-                    cocktailDao.deleteAllPopularDrinks()
-                    cocktailDao.insertCocktails(cocktails)
-                    cocktailDao.insertMostPopularDrinks(popularCocktails)
+                when (preferencesFlow.first().cocktailFilter.name.lowercase()) {
+                    "latest" -> {
+                        Log.d(TAG, "latest")
+                        database.withTransaction {
+                            cocktailDao.deleteLatestCocktails()
+                            cocktailDao.insertCocktails(cocktails)
+                            cocktailDao.insertLatestCocktails(filteredDrinks as List<LatestCocktails>)
+                        }
+                    }
+
+                    "popular" -> {
+                        Log.d(TAG, "popular")
+                        database.withTransaction {
+                            cocktailDao.deletePopularDrinks()
+                            cocktailDao.insertCocktails(cocktails)
+                            cocktailDao.insertPopularCocktails(filteredDrinks as List<PopularCocktails>)
+                        }
+                    }
+                    "randomselection" -> {
+                        Log.d(TAG, "randon´m")
+                        database.withTransaction {
+                            cocktailDao.deleteRandomizedCocktails()
+                            cocktailDao.insertCocktails(cocktails)
+                            cocktailDao.insertRandomizedCocktails(filteredDrinks as List<RandomCocktails>)
+                        }
+                    }
                 }
-                cocktails
             }
         )
-
 }

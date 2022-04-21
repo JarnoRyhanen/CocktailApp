@@ -47,8 +47,20 @@ data class Cocktails(
     val drinkMeasure15: String?
 )
 
-@Entity(tableName = "most_popular_drinks")
-data class MostPopularDrinks(
+@Entity(tableName = "popular_cocktails")
+data class PopularCocktails(
+    val drinkId: String,
+    @PrimaryKey(autoGenerate = true) val id: Int = 0
+)
+
+@Entity(tableName = "random_cocktails")
+data class RandomCocktails(
+    val drinkId: String,
+    @PrimaryKey(autoGenerate = true) val id: Int = 0
+)
+
+@Entity(tableName = "latest_cocktails")
+data class LatestCocktails(
     val drinkId: String,
     @PrimaryKey(autoGenerate = true) val id: Int = 0
 )

@@ -5,4 +5,10 @@
     <string name="home">Home</string>
     <string name="results_could_not_be_loaded">Results could not be loaded</string>
     <string name="no_results_found">No results found</string>
+    <string name="could_not_refresh">Could not refresh: %s</string>
+    <string name="unknown_error_occured">Unknown error occurred</string>
+    <string name="popular">Popular</string>
+    <string name="latest">Latest</string>
+    <string name="random">Random</string>
+    <string name="retry">retry</string>
 </resources>

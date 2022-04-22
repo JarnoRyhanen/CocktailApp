@@ -63,4 +63,7 @@ interface CocktailDao {
 
     @Query("DELETE FROM latest_cocktails")
     suspend fun deleteLatestCocktails()
+
+    @Query("DELETE FROM cocktails WHERE timeStamp < :timestamp AND isFavourited = 0")
+    suspend fun deleteNonFavoritedCocktailsOlderThan(timestamp: Long)
 }

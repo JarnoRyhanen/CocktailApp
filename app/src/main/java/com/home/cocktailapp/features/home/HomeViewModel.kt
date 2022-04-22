@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @HiltViewModel
@@ -45,6 +46,14 @@ class HomeViewModel @Inject constructor(
 
     fun onFilterItemSelected(cocktailFilter: CocktailFilter) = viewModelScope.launch {
         preferencesManager.updateCocktailFilter(cocktailFilter)
+    }
+
+    init {
+        viewModelScope.launch {
+            repository.deleteNonFavoritedCocktailsOlderThan(
+                System.currentTimeMillis() - TimeUnit.DAYS.toMillis(7)
+            )
+        }
     }
 
     fun normalRefresh() {

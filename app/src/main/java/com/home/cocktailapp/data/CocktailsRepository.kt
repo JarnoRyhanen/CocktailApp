@@ -126,4 +126,9 @@ class CocktailsRepository @Inject constructor(
             },
             onFetchSuccess = onFetchSuccess
         )
+
+    suspend fun deleteNonFavoritedCocktailsOlderThan(timestamp: Long) {
+        cocktailDao.deleteNonFavoritedCocktailsOlderThan(timestamp)
+    }
+
 }

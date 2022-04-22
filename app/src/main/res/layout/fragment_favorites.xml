@@ -7,11 +7,22 @@
     tools:context=".features.favorites.FavoritesFragment"
     >
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:listitem="@layout/recyclerview_item_drink"
+        />
+
+
     <TextView
+        android:id="@+id/text_view_favorites"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/favorites"
         android:layout_centerInParent="true"
+        android:text="@string/press_the_stars_to_save_your_favorite_here"
+        android:visibility="visible"
         />
+
 
 </RelativeLayout>

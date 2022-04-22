@@ -3,6 +3,7 @@ package com.home.cocktailapp.features.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.home.cocktailapp.data.CocktailFilter
+import com.home.cocktailapp.data.Cocktails
 import com.home.cocktailapp.data.CocktailsRepository
 import com.home.cocktailapp.data.PreferencesManager
 import com.home.cocktailapp.util.Resource
@@ -69,6 +70,14 @@ class HomeViewModel @Inject constructor(
             viewModelScope.launch {
                 refreshTriggerChannel.send(Refresh.FORCE)
             }
+        }
+    }
+
+    fun onFavoriteClick(cocktail: Cocktails) {
+        val currentlyFavorited = cocktail.isFavourited
+        val updatedCocktail = cocktail.copy(isFavourited = !currentlyFavorited)
+        viewModelScope.launch {
+            repository.updateCocktail(updatedCocktail)
         }
     }
 

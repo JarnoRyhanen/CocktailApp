@@ -11,4 +11,6 @@
     <string name="latest">Latest</string>
     <string name="random">Random</string>
     <string name="retry">retry</string>
+    <string name="press_the_stars_to_save_your_favorite_here">Press the stars to save your favorites here</string>
+    <string name="delete_all_favorites">Delete all favorites</string>
 </resources>

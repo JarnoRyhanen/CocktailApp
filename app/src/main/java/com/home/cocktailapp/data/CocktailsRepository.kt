@@ -43,7 +43,15 @@ class CocktailsRepository @Inject constructor(
                 response.drinks
             },
             saveFetchResult = { serverCocktails ->
+
+                val favoritedCocktails = cocktailDao.getAllFavoritedCocktails().first()
+
                 val cocktails = serverCocktails.map { serverCocktail ->
+
+                    val isFavorited = favoritedCocktails.any { favoritedCocktail ->
+                        favoritedCocktail.cocktailId == serverCocktail.idDrink
+                    }
+
                     Cocktails(
                         cocktailId = serverCocktail.idDrink,
                         drinkName = serverCocktail.strDrink,
@@ -51,7 +59,7 @@ class CocktailsRepository @Inject constructor(
                         drinkImageUrl = serverCocktail.strDrinkThumb,
                         drinkCategory = serverCocktail.category,
 
-                        isFavourited = false,
+                        isFavourited = isFavorited,
                         isAlcoholic = serverCocktail.strAlcoholic == "Alcoholic",
 
                         drinkIngredient1 = serverCocktail.strIngredient1,
@@ -126,6 +134,17 @@ class CocktailsRepository @Inject constructor(
             },
             onFetchSuccess = onFetchSuccess
         )
+
+    fun getAllFavoritedCocktails(): Flow<List<Cocktails>> =
+        cocktailDao.getAllFavoritedCocktails()
+
+    suspend fun updateCocktail(cocktail: Cocktails) {
+        cocktailDao.updateCocktail(cocktail)
+    }
+
+    suspend fun resetAllFavorites() {
+        cocktailDao.resetAllFavorites()
+    }
 
     suspend fun deleteNonFavoritedCocktailsOlderThan(timestamp: Long) {
         cocktailDao.deleteNonFavoritedCocktailsOlderThan(timestamp)

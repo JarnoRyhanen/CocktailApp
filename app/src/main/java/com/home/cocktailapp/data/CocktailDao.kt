@@ -1,9 +1,6 @@
 package com.home.cocktailapp.data
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -43,8 +40,17 @@ interface CocktailDao {
     @Query("SELECT * FROM latest_cocktails INNER JOIN cocktails ON cocktailId = drinkId")
     fun getDrinksFilteredByLatest(): Flow<List<Cocktails>>
 
+    @Query("SELECT * FROM cocktails WHERE isFavourited = 1")
+    fun getAllFavoritedCocktails(): Flow<List<Cocktails>>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCocktails(cocktails: List<Cocktails>)
+
+    @Update
+    suspend fun updateCocktail(cocktail: Cocktails)
+
+    @Query("UPDATE cocktails SET isFavourited = 0")
+    suspend fun resetAllFavorites()
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPopularCocktails(cocktails: List<PopularCocktails>)

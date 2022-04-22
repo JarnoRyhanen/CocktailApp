@@ -7,7 +7,9 @@ import com.home.cocktailapp.data.Cocktails
 import com.home.cocktailapp.databinding.RecyclerviewItemDrinkBinding
 
 class CocktailViewHolder(
-    private val binding: RecyclerviewItemDrinkBinding
+    private val binding: RecyclerviewItemDrinkBinding,
+    private val onItemClick: (Int) -> Unit,
+    private val onFavoriteClick: (Int) -> Unit
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(cocktail: Cocktails) {
@@ -27,4 +29,20 @@ class CocktailViewHolder(
         }
     }
 
+    init {
+        binding.apply {
+            root.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    onItemClick(position)
+                }
+            }
+            imageViewFavorite.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    onFavoriteClick(position)
+                }
+            }
+        }
+    }
 }

@@ -1,7 +1,6 @@
 package com.home.cocktailapp.features.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -30,13 +29,20 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         val binding = FragmentHomeBinding.bind(view)
 
-        val cocktailAdapter = CocktailListAdapter()
+        val cocktailAdapter = CocktailListAdapter(
+            onItemClick = { cocktails ->
+//todo open a fragment that contails the cocktail details(image, ingredients and measures)
+            },
+            onFavoriteClick = { cocktail ->
+                viewModel.onFavoriteClick(cocktail)
+            })
 
         binding.apply {
             recyclerView.apply {
                 adapter = cocktailAdapter
                 layoutManager = LinearLayoutManager(requireContext())
                 setHasFixedSize(true)
+                itemAnimator?.changeDuration = 0
             }
             viewLifecycleOwner.lifecycleScope.launchWhenStarted {
                 viewModel.drinksByQuery.collect {

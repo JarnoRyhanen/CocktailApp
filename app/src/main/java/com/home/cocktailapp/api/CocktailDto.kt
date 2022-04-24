@@ -1,5 +1,7 @@
 package com.home.cocktailapp.api
 
+import com.home.cocktailapp.data.Cocktails
+
 data class CocktailDto(
 
     val idDrink: String,
@@ -41,3 +43,48 @@ data class CocktailDto(
     val strMeasure14: String?,
     val strMeasure15: String?
 )
+
+fun CocktailDto.toCocktails(isFavorited: Boolean): Cocktails {
+
+   return Cocktails(
+        cocktailId = idDrink,
+        drinkName = strDrink,
+        drinkInstructions = strInstructions,
+        drinkImageUrl = strDrinkThumb,
+        drinkCategory = category,
+        isFavourited = isFavorited,
+        isAlcoholic = strAlcoholic == "Alcoholic",
+
+        drinkIngredient1 = strIngredient1,
+        drinkIngredient2 = strIngredient2,
+        drinkIngredient3 = strIngredient3,
+        drinkIngredient4 = strIngredient4,
+        drinkIngredient5 = strIngredient5,
+        drinkIngredient6 = strIngredient6,
+        drinkIngredient7 = strIngredient7,
+        drinkIngredient8 = strIngredient8,
+        drinkIngredient9 = strIngredient9,
+        drinkIngredient10 = strIngredient10,
+        drinkIngredient11 = strIngredient11,
+        drinkIngredient12 = strIngredient12,
+        drinkIngredient13 = strIngredient13,
+        drinkIngredient14 = strIngredient14,
+        drinkIngredient15 = strIngredient15,
+
+        drinkMeasure1 = strMeasure1,
+        drinkMeasure2 = strMeasure2,
+        drinkMeasure3 = strMeasure3,
+        drinkMeasure4 = strMeasure4,
+        drinkMeasure5 = strMeasure5,
+        drinkMeasure6 = strMeasure6,
+        drinkMeasure7 = strMeasure7,
+        drinkMeasure8 = strMeasure8,
+        drinkMeasure9 = strMeasure9,
+        drinkMeasure10 = strMeasure10,
+        drinkMeasure11 = strMeasure11,
+        drinkMeasure12 = strMeasure12,
+        drinkMeasure13 = strMeasure13,
+        drinkMeasure14 = strMeasure14,
+        drinkMeasure15 = strMeasure15
+    )
+}

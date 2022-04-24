@@ -1,29 +1,30 @@
-package com.home.cocktailapp.features.home
+package com.home.cocktailapp.features.search
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.home.cocktailapp.data.CocktailFilter
 import com.home.cocktailapp.data.Cocktails
 import com.home.cocktailapp.data.CocktailsRepository
 import com.home.cocktailapp.data.PreferencesManager
+import com.home.cocktailapp.data.SearchQueryType
 import com.home.cocktailapp.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
+private const val TAG = "SearchViewModel"
+
 @HiltViewModel
-class HomeViewModel @Inject constructor(
+class SearchViewModel @Inject constructor(
     private val repository: CocktailsRepository,
     private val preferencesManager: PreferencesManager
 ) : ViewModel() {
 
-    private val preferencesFlow = preferencesManager.filterPreferencesFlow
+    private val searchQuery = MutableStateFlow("")
+
+    var pendingScrollToTopAfterRefresh = false
 
     private val eventChannel = Channel<Event>()
     val events = eventChannel.receiveAsFlow()
@@ -31,34 +32,27 @@ class HomeViewModel @Inject constructor(
     private val refreshTriggerChannel = Channel<Refresh>()
     private val refreshTrigger = refreshTriggerChannel.receiveAsFlow()
 
-    var pendingScrollToTopAfterRefresh = false
+    private val searchQueryTypeFlow = preferencesManager.searchQueryTypeFlow
 
-    val drinksByQuery = refreshTrigger.flatMapLatest { refresh ->
-        repository.getDrinksByFilter(
+    val searchResults = refreshTrigger.flatMapLatest { refresh ->
+        repository.getSearchResults(
             refresh == Refresh.FORCE,
-            preferencesFlow,
+            searchQuery,
+            searchQueryTypeFlow,
             onFetchFailed = { t ->
-                viewModelScope.launch { eventChannel.send((Event.ShowErrorMessage(t))) }
+                viewModelScope.launch { eventChannel.send(Event.ShowErrorMessage(t)) }
             },
             onFetchSuccess = {
                 pendingScrollToTopAfterRefresh = true
             })
     }.stateIn(viewModelScope, SharingStarted.Lazily, null)
 
-    fun onFilterItemSelected(cocktailFilter: CocktailFilter) = viewModelScope.launch {
-        preferencesManager.updateCocktailFilter(cocktailFilter)
+    fun onSearchQuerySubmit(query: String) {
+        searchQuery.value = query
     }
 
-    init {
-        viewModelScope.launch {
-            repository.deleteNonFavoritedCocktailsOlderThan(
-                System.currentTimeMillis() - TimeUnit.DAYS.toMillis(7)
-            )
-        }
-    }
-
-    fun normalRefresh() {
-        if (drinksByQuery.value !is Resource.Loading) {
+    fun onNormalRefresh() {
+        if (searchResults.value !is Resource.Loading) {
             viewModelScope.launch {
                 refreshTriggerChannel.send(Refresh.NORMAL)
             }
@@ -66,10 +60,17 @@ class HomeViewModel @Inject constructor(
     }
 
     fun onManualRefresh() {
-        if (drinksByQuery.value !is Resource.Loading) {
+        if (searchResults.value !is Resource.Loading) {
             viewModelScope.launch {
                 refreshTriggerChannel.send(Refresh.FORCE)
             }
+        }
+    }
+
+    fun onSearchQueryTypeSelected(searchQueryType: SearchQueryType) {
+        viewModelScope.launch {
+            preferencesManager.updateSearchQueryType(searchQueryType)
+            Log.d(TAG, "onSearchQueryTypeSelected: ")
         }
     }
 

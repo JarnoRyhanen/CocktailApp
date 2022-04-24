@@ -1,6 +1,7 @@
 package com.home.cocktailapp.features.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -47,6 +48,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             viewLifecycleOwner.lifecycleScope.launchWhenStarted {
                 viewModel.drinksByQuery.collect {
                     val result = it ?: return@collect
+                    Log.d("tag", "onViewCreated: ${result.data?.size}")
                     swipeRefreshLayout.isRefreshing = result is Resource.Loading
                     recyclerView.isVisible = !result.data.isNullOrEmpty()
                     textViewError.isVisible = result.error != null && result.data.isNullOrEmpty()

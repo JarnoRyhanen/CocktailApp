@@ -17,18 +17,22 @@ enum class CocktailFilter {
     POPULAR, LATEST, RANDOMSELECTION
 }
 
+enum class SearchQueryType {
+    SEARCH_COCKTAILS, SEARCH_COCKTAILS_BY_INGREDIENT
+}
+
 private const val TAG = "PreferencesManager"
 
 data class FilterPreferences(val cocktailFilter: CocktailFilter)
+data class SearchQueryTypePreferences(val searchQueryType: SearchQueryType)
 
 @Singleton
 class PreferencesManager @Inject constructor(
     @ApplicationContext context: Context
 ){
-
     private val dataStore = context.createDataStore("user_preferences")
 
-    val preferencesFlow = dataStore.data
+    val filterPreferencesFlow = dataStore.data
         .catch { exception ->
             if (exception is IOException) {
                 Log.e(TAG, "Error reading preferences", exception)
@@ -44,13 +48,36 @@ class PreferencesManager @Inject constructor(
             FilterPreferences(cocktailFilter)
         }
 
+    val searchQueryTypeFlow = dataStore.data
+        .catch { exception ->
+            if (exception is IOException) {
+                Log.e(TAG, "Error reading preferences", exception)
+                emit(emptyPreferences())
+            } else {
+                throw exception
+            }
+        }
+        .map { preferences ->
+            val searchQueryType = SearchQueryType.valueOf(
+                preferences[PreferencesKeys.SEARCH_QUERY_TYPE] ?: SearchQueryType.SEARCH_COCKTAILS.name
+            )
+            SearchQueryTypePreferences(searchQueryType)
+        }
+
+
     suspend fun updateCocktailFilter(cocktailFilter: CocktailFilter) {
         dataStore.edit { preferences ->
             preferences[PreferencesKeys.COCKTAIL_FILTER] = cocktailFilter.name
         }
     }
+    suspend fun updateSearchQueryType(searchQueryType: SearchQueryType) {
+        dataStore.edit { preferences ->
+            preferences[PreferencesKeys.SEARCH_QUERY_TYPE] = searchQueryType.name
+        }
+    }
 
     private object PreferencesKeys {
         val COCKTAIL_FILTER = preferencesKey<String>("cocktail_filter")
+        val SEARCH_QUERY_TYPE = preferencesKey<String>("search_query_type")
     }
 }

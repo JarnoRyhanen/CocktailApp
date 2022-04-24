@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "cocktails")
 data class Cocktails(
     @PrimaryKey val cocktailId: String,
-    val drinkName: String,
+    val drinkName: String?,
     val drinkInstructions: String?,
     val drinkImageUrl: String?,
     val drinkCategory: String?,
@@ -46,6 +46,21 @@ data class Cocktails(
     val drinkMeasure13: String?,
     val drinkMeasure14: String?,
     val drinkMeasure15: String?
+)
+
+@Entity(tableName = "search_result_by_ingredient")
+data class SearchResultByIngredient(
+    val drinkId: String,
+    val drinkThumbnail: String,
+    val name: String,
+    val isFavourited: Boolean,
+    @PrimaryKey(autoGenerate = true) val id: Int = 0
+)
+
+@Entity(tableName = "search_results", primaryKeys = ["searchQuery","drinkId"])
+data class SearchResult(
+    val searchQuery: String,
+    val drinkId: String
 )
 
 @Entity(tableName = "popular_cocktails")

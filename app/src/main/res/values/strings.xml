@@ -13,4 +13,8 @@
     <string name="retry">retry</string>
     <string name="press_the_stars_to_save_your_favorite_here">Press the stars to save your favorites here</string>
     <string name="delete_all_favorites">Delete all favorites</string>
+    <string name="search_instructions">Tap the magnifying glass to start searching</string>
+    <string name="search_cocktail">Search cocktail</string>
+    <string name="search_ingredient">Search ingredient</string>
+    <string name="search_cocktail_by_ingredient">Search cocktail by ingredient</string>
 </resources>

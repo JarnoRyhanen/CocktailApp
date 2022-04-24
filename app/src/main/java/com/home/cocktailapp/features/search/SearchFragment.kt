@@ -1,10 +1,140 @@
 package com.home.cocktailapp.features.search
 
+import android.os.Bundle
+import android.util.Log
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import androidx.appcompat.widget.SearchView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.home.cocktailapp.R
+import com.home.cocktailapp.data.SearchQueryType
+import com.home.cocktailapp.databinding.FragmentSearchBinding
+import com.home.cocktailapp.shared.CocktailListAdapter
+import com.home.cocktailapp.util.Resource
+import com.home.cocktailapp.util.exhaustive
+import com.home.cocktailapp.util.onQueryTextSubmit
+import com.home.cocktailapp.util.showSnackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 
 @AndroidEntryPoint
 class SearchFragment : Fragment(R.layout.fragment_search) {
 
+    private val viewModel: SearchViewModel by viewModels()
+
+    private var currentBinding: FragmentSearchBinding? = null
+    private val binding get() = currentBinding!!
+
+    private lateinit var searchAdapter: CocktailListAdapter
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        currentBinding = FragmentSearchBinding.bind(view)
+
+        searchAdapter = CocktailListAdapter(onItemClick = { cocktails ->
+//todo open a fragment that contails the cocktail details(image, ingredients and measures)
+        },
+            onFavoriteClick = { cocktail ->
+                viewModel.onFavoriteClick(cocktail)
+            })
+
+        binding.apply {
+            recyclerView.apply {
+                adapter = searchAdapter
+                layoutManager = LinearLayoutManager(requireContext())
+                setHasFixedSize(true)
+                itemAnimator?.changeDuration = 0
+            }
+            viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+                viewModel.searchResults.collectLatest {
+                    val result = it ?: return@collectLatest
+                    Log.d("tag", "onViewCreated: ${result.data?.size}")
+
+                    swipeRefreshLayout.isRefreshing = result is Resource.Loading
+                    recyclerView.isVisible = !result.data.isNullOrEmpty()
+                    textViewError.isVisible = result.error != null && result.data.isNullOrEmpty()
+                    textViewError.text = getString(
+                        R.string.could_not_refresh,
+                        result.error?.localizedMessage ?: getString(R.string.unknown_error_occured)
+                    )
+
+                    searchAdapter.submitList(result.data) {
+                        if (viewModel.pendingScrollToTopAfterRefresh) {
+                            recyclerView.scrollToPosition(0)
+                            viewModel.pendingScrollToTopAfterRefresh = false
+                        }
+                    }
+                }
+            }
+            swipeRefreshLayout.setOnRefreshListener {
+                viewModel.onManualRefresh()
+//                recyclerView.scrollToPosition(0)
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewModel.events.collect { event ->
+                when (event) {
+                    is SearchViewModel.Event.ShowErrorMessage -> showSnackbar(
+                        getString(
+                            R.string.could_not_refresh,
+                            event.error.localizedMessage
+                                ?: getString(R.string.unknown_error_occured)
+                        )
+                    )
+                }
+            }
+        }
+        setHasOptionsMenu(true)
+    }
+
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_search_cocktails, menu)
+
+        val searchItem = menu.findItem(R.id.action_search)
+        val searchView = searchItem?.actionView as SearchView
+
+        searchView.onQueryTextSubmit { query ->
+            viewModel.onSearchQuerySubmit(query.replace(" ",""))
+            viewModel.onManualRefresh()
+            searchView.clearFocus()
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        viewModel.onNormalRefresh()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem) =
+        when (item.itemId) {
+            R.id.action_search_cocktail -> {
+                viewModel.onSearchQueryTypeSelected(SearchQueryType.SEARCH_COCKTAILS)
+                viewModel.onManualRefresh()
+                true
+            }
+            R.id.action_search_ingredient -> {
+//                viewModel.onSearchQueryTypeSelected(SearchQueryType.I)
+                true
+            }
+            R.id.action_search_cocktail_by_ingredient -> {
+                viewModel.onSearchQueryTypeSelected(SearchQueryType.SEARCH_COCKTAILS_BY_INGREDIENT)
+                viewModel.onManualRefresh()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }.exhaustive
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding.recyclerView.adapter = null
+        currentBinding = null
+    }
 }

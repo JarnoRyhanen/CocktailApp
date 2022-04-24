@@ -13,6 +13,8 @@ interface CocktailDao {
             CocktailFilter.RANDOMSELECTION -> getDrinksFilteredByRandom()
         }
 
+    @Query("SELECT * FROM search_results INNER JOIN cocktails on cocktailId = drinkId WHERE searchQuery = :query")
+    fun getSearchResultCocktails(query: String): Flow<List<Cocktails>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertFilteredDrinks(filter: CocktailFilter, cocktails: List<Any>) =
@@ -46,6 +48,9 @@ interface CocktailDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCocktails(cocktails: List<Cocktails>)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertSearchResults(searchResult: List<SearchResult>)
+
     @Update
     suspend fun updateCocktail(cocktail: Cocktails)
 
@@ -66,6 +71,9 @@ interface CocktailDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertLatestCocktails(cocktails: List<LatestCocktails>)
+
+    @Query("DELETE FROM search_results WHERE searchQuery = :query")
+    suspend fun deleteSearchResultsForQuery(query: String)
 
     @Query("DELETE FROM latest_cocktails")
     suspend fun deleteLatestCocktails()

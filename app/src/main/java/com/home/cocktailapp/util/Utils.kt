@@ -1,6 +1,7 @@
 package com.home.cocktailapp.util
 
 import android.view.View
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 
@@ -14,3 +15,18 @@ fun Fragment.showSnackbar(
 
 val <T> T.exhaustive: T
     get() = this
+
+inline fun SearchView.onQueryTextSubmit(crossinline listener: (String) -> Unit) {
+    this.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        override fun onQueryTextSubmit(query: String?): Boolean {
+            if (!query.isNullOrEmpty()) {
+                listener(query)
+            }
+            return true
+        }
+
+        override fun onQueryTextChange(newText: String?): Boolean {
+            return true
+        }
+    })
+}

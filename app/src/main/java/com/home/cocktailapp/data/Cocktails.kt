@@ -1,9 +1,12 @@
 package com.home.cocktailapp.data
 
+import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.parcelize.Parcelize
 
 @Entity(tableName = "cocktails")
+@Parcelize
 data class Cocktails(
     @PrimaryKey val cocktailId: String,
     val drinkName: String?,
@@ -46,7 +49,7 @@ data class Cocktails(
     val drinkMeasure13: String?,
     val drinkMeasure14: String?,
     val drinkMeasure15: String?
-)
+) : Parcelable
 
 @Entity(tableName = "search_result_by_ingredient")
 data class SearchResultByIngredient(

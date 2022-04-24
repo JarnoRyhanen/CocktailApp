@@ -11,10 +11,12 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.home.cocktailapp.R
 import com.home.cocktailapp.data.SearchQueryType
 import com.home.cocktailapp.databinding.FragmentSearchBinding
+import com.home.cocktailapp.features.home.HomeFragmentDirections
 import com.home.cocktailapp.shared.CocktailListAdapter
 import com.home.cocktailapp.util.*
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,7 +37,8 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         currentBinding = FragmentSearchBinding.bind(view)
 
         searchAdapter = CocktailListAdapter(onItemClick = { cocktails ->
-//todo open a fragment that contails the cocktail details(image, ingredients and measures)
+            val action = SearchFragmentDirections.actionSearchFragmentToDetailsFragment(cocktails)
+            findNavController().navigate(action)
         },
             onFavoriteClick = { cocktail ->
                 viewModel.onFavoriteClick(cocktail)

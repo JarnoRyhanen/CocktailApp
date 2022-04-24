@@ -16,8 +16,6 @@ import java.io.IOException
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-private const val TAG = "CocktailsRepository"
-
 class CocktailsRepository @Inject constructor(
     private val api: CocktailApi,
     private val database: CocktailDatabase,
@@ -43,32 +41,36 @@ class CocktailsRepository @Inject constructor(
                 response.drinks
             },
             saveFetchResult = { serverCocktails ->
-                val favoritedCocktails = cocktailDao.getAllFavoritedCocktails().first()
-                val cocktails = serverCocktails.map { serverCocktail ->
-                    val isFavorited = favoritedCocktails.any { favoritedCocktail ->
-                        favoritedCocktail.cocktailId == serverCocktail.idDrink
+                if (!serverCocktails.isNullOrEmpty()) {
+                    val favoritedCocktails = cocktailDao.getAllFavoritedCocktails().first()
+                    val cocktails = serverCocktails.map { serverCocktail ->
+                        val isFavorited = favoritedCocktails.any { favoritedCocktail ->
+                            favoritedCocktail.cocktailId == serverCocktail.idDrink
+                        }
+                        serverCocktail.toCocktails(isFavorited)
                     }
-                    serverCocktail.toCocktails(isFavorited)
-                }
 
-                val filteredDrinks = serverCocktails.map { cocktail ->
-                    when (preferencesFlow.first().cocktailFilter.name.lowercase()) {
-                        "latest" -> LatestCocktails(drinkId = cocktail.idDrink)
-                        "popular" -> PopularCocktails(drinkId = cocktail.idDrink)
-                        "randomselection" -> RandomCocktails(drinkId = cocktail.idDrink)
-                        else -> {}
+                    val filteredDrinks = serverCocktails.map { cocktail ->
+                        when (preferencesFlow.first().cocktailFilter.name.lowercase()) {
+                            "latest" -> LatestCocktails(drinkId = cocktail.idDrink)
+                            "popular" -> PopularCocktails(drinkId = cocktail.idDrink)
+                            "randomselection" -> RandomCocktails(drinkId = cocktail.idDrink)
+                            else -> {}
+                        }
                     }
-                }
 
-                database.withTransaction {
-                    cocktailDao.insertCocktails(cocktails)
-                    cocktailDao.insertFilteredDrinks(
-                        preferencesFlow.first().cocktailFilter,
-                        filteredDrinks
-                    )
+                    database.withTransaction {
+                        cocktails.let { cocktailDao.insertCocktails(it) }
+                        filteredDrinks.let {
+                            cocktailDao.insertFilteredDrinks(
+                                preferencesFlow.first().cocktailFilter,
+                                it
+                            )
+                        }
+                    }
                 }
             },
-            shouldFetch =  { cachedCocktails ->
+            shouldFetch = { cachedCocktails ->
                 if (forceRefresh) {
                     true
                 } else {
@@ -92,62 +94,64 @@ class CocktailsRepository @Inject constructor(
 
     fun getSearchResults(
         forceRefresh: Boolean,
-        searchQuery: MutableStateFlow<String>,
+        searchQuery: MutableStateFlow<String?>,
         searchQueryTypeFlow: Flow<SearchQueryTypePreferences>,
         onFetchFailed: (Throwable) -> Unit,
         onFetchSuccess: () -> Unit
     ): Flow<Resource<List<Cocktails>>> = networkBoundResource(
         query = {
-            val searchedCocktails = searchQuery.flatMapLatest { query ->
-                cocktailDao.getSearchResultCocktails(query)
-            }
+                val searchedCocktails = searchQuery.flatMapLatest { query ->
+                    cocktailDao.getSearchResultCocktails(query.orEmpty())
+                }
             searchedCocktails
         },
         fetch = {
             when (searchQueryTypeFlow.first().searchQueryType) {
                 SearchQueryType.SEARCH_COCKTAILS -> {
-                    val response = api.searchDrinks(searchQuery.value)
-                    response.drinks
+                    val response = searchQuery.value?.let { api.searchDrinks(it) }
+                    response?.drinks
                 }
                 SearchQueryType.SEARCH_COCKTAILS_BY_INGREDIENT -> {
-                    val response = api.searchDrinksByIngredient(searchQuery.value)
-                    response.drinks
+                    val response = searchQuery.value?.let { api.searchDrinksByIngredient(it) }
+                    response?.drinks
                 }
             }.exhaustive
         },
         saveFetchResult = { response -> // list<CocktailDto>
+            if (!response.isNullOrEmpty()) {
+                val favoritedCocktails = cocktailDao.getAllFavoritedCocktails().first()
 
-            val favoritedCocktails = cocktailDao.getAllFavoritedCocktails().first()
+                var cocktails: List<Cocktails> = emptyList()
 
-            var cocktails: List<Cocktails> = emptyList()
-
-            when (searchQueryTypeFlow.first().searchQueryType) {
-                SearchQueryType.SEARCH_COCKTAILS -> {
-                    cocktails = response.map { serverCocktail ->
-                        val isFavorited = favoritedCocktails.any { favoritedCocktail ->
-                            favoritedCocktail.cocktailId == serverCocktail.idDrink
+                when (searchQueryTypeFlow.first().searchQueryType) {
+                    SearchQueryType.SEARCH_COCKTAILS -> {
+                        cocktails = response.map { serverCocktail ->
+                            val isFavorited = favoritedCocktails.any { favoritedCocktail ->
+                                favoritedCocktail.cocktailId == serverCocktail.idDrink
+                            }
+                            serverCocktail.toCocktails(isFavorited)
                         }
-                        serverCocktail.toCocktails(isFavorited)
+                    }
+                    SearchQueryType.SEARCH_COCKTAILS_BY_INGREDIENT -> {
+                        cocktails = response.map { serverCocktail ->
+                            val isFavorited = favoritedCocktails.any { favoritedCocktail ->
+                                favoritedCocktail.cocktailId == serverCocktail.idDrink
+                            }
+                            serverCocktail.toCocktails(isFavorited)
+                        }
                     }
                 }
-                SearchQueryType.SEARCH_COCKTAILS_BY_INGREDIENT -> {
-                    cocktails = response.map { serverCocktail ->
-                        val isFavorited = favoritedCocktails.any { favoritedCocktail ->
-                            favoritedCocktail.cocktailId == serverCocktail.idDrink
-                        }
-                        serverCocktail.toCocktails(isFavorited)
+                val searchResults = response.map { cocktail ->
+                    searchQuery.value?.let { SearchResult(it, drinkId = cocktail.idDrink) }
+                }
+                database.withTransaction {
+                    searchQuery.value?.let { cocktailDao.deleteSearchResultsForQuery(it) }
+                    cocktailDao.insertCocktails(cocktails)
+                    searchResults.let { results ->
+                        cocktailDao.insertSearchResults(results as List<SearchResult>)
                     }
                 }
             }
-            val searchResults = response.map { cocktail ->
-                SearchResult(searchQuery.value, drinkId = cocktail.idDrink)
-            }
-            database.withTransaction {
-                cocktailDao.deleteSearchResultsForQuery(searchQuery.value)
-                cocktailDao.insertCocktails(cocktails)
-                cocktailDao.insertSearchResults(searchResults)
-            }
-
         },
         shouldFetch = { cachedCocktails ->
             if (forceRefresh) {
@@ -164,7 +168,7 @@ class CocktailsRepository @Inject constructor(
         },
         onFetchFailed = { t ->
             if (t !is HttpException && t !is IOException
-                && t !is NullPointerException && t !is JsonSyntaxException
+                && t !is JsonSyntaxException
             ) {
                 throw t
             }

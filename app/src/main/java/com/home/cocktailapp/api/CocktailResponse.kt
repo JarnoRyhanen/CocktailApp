@@ -1,5 +1,5 @@
 package com.home.cocktailapp.api
 
 data class CocktailResponse(
-    val drinks : List<CocktailDto>
+    val drinks : List<CocktailDto>?
 )

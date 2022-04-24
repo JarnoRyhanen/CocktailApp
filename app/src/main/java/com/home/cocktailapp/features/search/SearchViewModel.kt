@@ -22,7 +22,7 @@ class SearchViewModel @Inject constructor(
     private val preferencesManager: PreferencesManager
 ) : ViewModel() {
 
-    private val searchQuery = MutableStateFlow("")
+    private val searchQuery = MutableStateFlow<String?>(null)
 
     var pendingScrollToTopAfterRefresh = false
 
@@ -35,16 +35,16 @@ class SearchViewModel @Inject constructor(
     private val searchQueryTypeFlow = preferencesManager.searchQueryTypeFlow
 
     val searchResults = refreshTrigger.flatMapLatest { refresh ->
-        repository.getSearchResults(
-            refresh == Refresh.FORCE,
-            searchQuery,
-            searchQueryTypeFlow,
-            onFetchFailed = { t ->
-                viewModelScope.launch { eventChannel.send(Event.ShowErrorMessage(t)) }
-            },
-            onFetchSuccess = {
-                pendingScrollToTopAfterRefresh = true
-            })
+                repository.getSearchResults(
+                    refresh == Refresh.FORCE,
+                    searchQuery,
+                    searchQueryTypeFlow,
+                    onFetchFailed = { t ->
+                        viewModelScope.launch { eventChannel.send(Event.ShowErrorMessage(t)) }
+                    }
+                ) {
+                    pendingScrollToTopAfterRefresh = true
+                }
     }.stateIn(viewModelScope, SharingStarted.Lazily, null)
 
     fun onSearchQuerySubmit(query: String) {

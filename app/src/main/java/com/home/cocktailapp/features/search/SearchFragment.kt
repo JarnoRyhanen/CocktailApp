@@ -56,14 +56,41 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                     val result = it ?: return@collectLatest
                     Log.d("tag", "onViewCreated: ${result.data?.size}")
 
-                    swipeRefreshLayout.isRefreshing = result is Resource.Loading
-                    recyclerView.isVisible = !result.data.isNullOrEmpty()
-                    textViewError.isVisible = result.error != null && result.data.isNullOrEmpty()
-                    textViewError.text = getString(
-                        R.string.could_not_refresh,
-                        result.error?.localizedMessage ?: getString(R.string.unknown_error_occured)
-                    )
+                    swipeRefreshLayout.isEnabled = true
+                    textViewInstructions.isVisible = false
 
+                    when (result) {
+                        is Resource.Loading -> {
+                            textViewError.isVisible = false
+                            textViewNoResults.isVisible = false
+                            swipeRefreshLayout.isRefreshing = true
+                            recyclerView.isVisible = searchAdapter.itemCount > 0
+                        }
+                        is Resource.Success -> {
+                            textViewError.isVisible = false
+                            swipeRefreshLayout.isRefreshing = false
+                            recyclerView.isVisible = searchAdapter.itemCount > 0
+                            val noResults =
+                                searchAdapter.itemCount < 1 && result.data.isNullOrEmpty()
+                            textViewNoResults.isVisible = noResults
+                            textViewNoResults.text = getString(R.string.no_results_found)
+                        }
+                        is Resource.Error -> {
+                            swipeRefreshLayout.isRefreshing = false
+                            textViewNoResults.isVisible = false
+                            recyclerView.isVisible = searchAdapter.itemCount > 0
+
+                            val noCachedResults =
+                                searchAdapter.itemCount < 1 && result.data.isNullOrEmpty()
+                            textViewError.isVisible = noCachedResults
+
+                            val errorMessage = getString(
+                                R.string.could_not_load_search_results,
+                                result.error?.localizedMessage ?: R.string.unknown_error_occured
+                            )
+                            textViewError.text = errorMessage
+                        }
+                    }
                     searchAdapter.submitList(result.data) {
                         if (viewModel.pendingScrollToTopAfterRefresh) {
                             recyclerView.scrollToPosition(0)
@@ -72,9 +99,11 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                     }
                 }
             }
+            textViewInstructions.isVisible = true
+            swipeRefreshLayout.isEnabled = false
+
             swipeRefreshLayout.setOnRefreshListener {
                 viewModel.onManualRefresh()
-//                recyclerView.scrollToPosition(0)
             }
         }
 
@@ -102,15 +131,10 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         val searchView = searchItem?.actionView as SearchView
 
         searchView.onQueryTextSubmit { query ->
-            viewModel.onSearchQuerySubmit(query.replace(" ",""))
+            viewModel.onSearchQuerySubmit(query.replace(" ", ""))
             viewModel.onManualRefresh()
             searchView.clearFocus()
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        viewModel.onNormalRefresh()
     }
 
     override fun onOptionsItemSelected(item: MenuItem) =
@@ -121,7 +145,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 true
             }
             R.id.action_search_ingredient -> {
-//                viewModel.onSearchQueryTypeSelected(SearchQueryType.I)
                 true
             }
             R.id.action_search_cocktail_by_ingredient -> {

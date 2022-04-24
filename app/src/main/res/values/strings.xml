@@ -9,6 +9,7 @@
     <string name="unknown_error_occured">Unknown error occurred</string>
     <string name="popular">Popular</string>
     <string name="latest">Latest</string>
+    <string name="could_not_load_search_results">Could not load search results: %s</string>
     <string name="random">Random</string>
     <string name="retry">retry</string>
     <string name="press_the_stars_to_save_your_favorite_here">Press the stars to save your favorites here</string>

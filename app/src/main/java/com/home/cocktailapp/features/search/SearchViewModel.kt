@@ -24,6 +24,8 @@ class SearchViewModel @Inject constructor(
 
     private val searchQuery = MutableStateFlow<String?>(null)
 
+    val hasCurrentQuery = searchQuery.map { it != null }
+
     var pendingScrollToTopAfterRefresh = false
 
     private val eventChannel = Channel<Event>()
@@ -47,8 +49,14 @@ class SearchViewModel @Inject constructor(
                 }
     }.stateIn(viewModelScope, SharingStarted.Lazily, null)
 
+    var refreshInProgress = false
+    var pendingScrollToTopAfterNewQuery = false
+    var newQueryInProgress = false
+
     fun onSearchQuerySubmit(query: String) {
         searchQuery.value = query
+        newQueryInProgress = true
+        pendingScrollToTopAfterNewQuery = true
     }
 
     fun onNormalRefresh() {

@@ -16,10 +16,7 @@ import com.home.cocktailapp.R
 import com.home.cocktailapp.data.SearchQueryType
 import com.home.cocktailapp.databinding.FragmentSearchBinding
 import com.home.cocktailapp.shared.CocktailListAdapter
-import com.home.cocktailapp.util.Resource
-import com.home.cocktailapp.util.exhaustive
-import com.home.cocktailapp.util.onQueryTextSubmit
-import com.home.cocktailapp.util.showSnackbar
+import com.home.cocktailapp.util.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 
@@ -55,25 +52,30 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 viewModel.searchResults.collectLatest {
                     val result = it ?: return@collectLatest
                     Log.d("tag", "onViewCreated: ${result.data?.size}")
-
-                    swipeRefreshLayout.isEnabled = true
-                    textViewInstructions.isVisible = false
-
                     when (result) {
                         is Resource.Loading -> {
                             textViewError.isVisible = false
                             textViewNoResults.isVisible = false
                             swipeRefreshLayout.isRefreshing = true
-                            recyclerView.isVisible = searchAdapter.itemCount > 0
+                            recyclerView.showIfOrInvisible {
+                                !viewModel.newQueryInProgress && searchAdapter.itemCount > 0
+                            }
+
+                            viewModel.refreshInProgress = true
+                            viewModel.pendingScrollToTopAfterRefresh = true
                         }
                         is Resource.Success -> {
                             textViewError.isVisible = false
                             swipeRefreshLayout.isRefreshing = false
-                            recyclerView.isVisible = searchAdapter.itemCount > 0
+                            recyclerView.isVisible =
+                                searchAdapter.itemCount > 0 || !result.data.isNullOrEmpty()
                             val noResults =
                                 searchAdapter.itemCount < 1 && result.data.isNullOrEmpty()
                             textViewNoResults.isVisible = noResults
                             textViewNoResults.text = getString(R.string.no_results_found)
+
+                            viewModel.refreshInProgress = false
+                            viewModel.newQueryInProgress = false
                         }
                         is Resource.Error -> {
                             swipeRefreshLayout.isRefreshing = false
@@ -89,9 +91,20 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                                 result.error?.localizedMessage ?: R.string.unknown_error_occured
                             )
                             textViewError.text = errorMessage
+
+                            if (viewModel.refreshInProgress) {
+                                showSnackbar(errorMessage)
+                            }
+                            viewModel.pendingScrollToTopAfterRefresh = false
+                            viewModel.refreshInProgress = false
+                            viewModel.newQueryInProgress = false
                         }
                     }
                     searchAdapter.submitList(result.data) {
+                        if (viewModel.pendingScrollToTopAfterNewQuery) {
+                            recyclerView.scrollToPosition(0)
+                            viewModel.pendingScrollToTopAfterNewQuery = false
+                        }
                         if (viewModel.pendingScrollToTopAfterRefresh) {
                             recyclerView.scrollToPosition(0)
                             viewModel.pendingScrollToTopAfterRefresh = false
@@ -99,8 +112,16 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                     }
                 }
             }
-            textViewInstructions.isVisible = true
-            swipeRefreshLayout.isEnabled = false
+
+            viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+                viewModel.hasCurrentQuery.collect { hasCurrentQuery ->
+                    textViewInstructions.isVisible = !hasCurrentQuery
+                    swipeRefreshLayout.isEnabled = hasCurrentQuery
+                    if (!hasCurrentQuery) {
+                        recyclerView.isVisible = false
+                    }
+                }
+            }
 
             swipeRefreshLayout.setOnRefreshListener {
                 viewModel.onManualRefresh()
@@ -123,7 +144,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         setHasOptionsMenu(true)
     }
 
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_search_cocktails, menu)
 
@@ -141,7 +161,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         when (item.itemId) {
             R.id.action_search_cocktail -> {
                 viewModel.onSearchQueryTypeSelected(SearchQueryType.SEARCH_COCKTAILS)
-                viewModel.onManualRefresh()
                 true
             }
             R.id.action_search_ingredient -> {
@@ -149,7 +168,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             }
             R.id.action_search_cocktail_by_ingredient -> {
                 viewModel.onSearchQueryTypeSelected(SearchQueryType.SEARCH_COCKTAILS_BY_INGREDIENT)
-                viewModel.onManualRefresh()
                 true
             }
             else -> super.onOptionsItemSelected(item)

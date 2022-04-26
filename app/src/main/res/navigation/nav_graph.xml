@@ -31,7 +31,7 @@
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.home.cocktailapp.features.search.SearchFragment"
+        android:name="com.home.cocktailapp.features.search.cocktails.SearchFragment"
         android:label="@string/search"
         tools:layout="@layout/fragment_search"
         >
@@ -51,4 +51,9 @@
             app:argType="com.home.cocktailapp.data.Cocktails"
             />
     </fragment>
+    <fragment
+        android:id="@+id/searchIngredientsFragment"
+        android:name="com.home.cocktailapp.features.search.ingredients.SearchIngredientsFragment"
+        android:label="Search Ingredients"
+        />
 </navigation>

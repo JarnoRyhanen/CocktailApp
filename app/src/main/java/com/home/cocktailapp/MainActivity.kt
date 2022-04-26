@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
         navController = navHostFragment.findNavController()
 
         appBarConfiguration = AppBarConfiguration(
-            setOf(R.id.homeFragment, R.id.searchFragment, R.id.favoritesFragment)
+            setOf(R.id.homeFragment, R.id.searchFragment, R.id.favoritesFragment, R.id.searchIngredientsFragment)
         )
 
         setSupportActionBar(binding.toolbar)

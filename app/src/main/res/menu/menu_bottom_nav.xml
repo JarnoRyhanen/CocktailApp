@@ -12,6 +12,11 @@
         android:title="@string/search"
         />
     <item
+        android:id="@+id/searchIngredientsFragment"
+        android:title="@string/search_ingredient"
+        android:icon="@drawable/ic_search"
+        />
+    <item
         android:id="@+id/favoritesFragment"
         android:icon="@drawable/ic_favorite_full"
         android:title="@string/favorites"

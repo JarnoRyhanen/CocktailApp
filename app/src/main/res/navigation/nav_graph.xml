@@ -43,7 +43,7 @@
     <fragment
         android:id="@+id/detailsFragment"
         android:name="com.home.cocktailapp.features.details.DetailsFragment"
-        android:label="DetailsFragment"
+        android:label="Details"
         tools:layout="@layout/fragment_details"
         >
         <argument

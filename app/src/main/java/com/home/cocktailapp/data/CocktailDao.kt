@@ -45,9 +45,6 @@ interface CocktailDao {
     @Query("SELECT * FROM cocktails WHERE isFavourited = 1")
     fun getAllFavoritedCocktails(): Flow<List<Cocktails>>
 
-    @Query("SELECT * FROM cocktails WHERE cocktailId = :id")
-    suspend fun getCocktailByID(id: String): Cocktails
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCocktails(cocktails: List<Cocktails>)
 

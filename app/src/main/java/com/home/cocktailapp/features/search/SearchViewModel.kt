@@ -82,12 +82,6 @@ class SearchViewModel @Inject constructor(
     enum class Refresh {
         FORCE, NORMAL
     }
-    suspend fun insertCocktailById(id: String): Boolean {
-       return repository.insertCocktailById(id)
-    }
-    suspend fun getPreferences(): SearchQueryType {
-        return preferencesManager.searchQueryTypeFlow.first().searchQueryType
-    }
 
     sealed class Event {
         data class ShowErrorMessage(val error: Throwable) : Event()

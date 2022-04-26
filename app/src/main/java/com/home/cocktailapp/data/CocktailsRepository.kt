@@ -1,6 +1,5 @@
 package com.home.cocktailapp.data
 
-import android.util.Log
 import androidx.room.withTransaction
 import com.google.gson.JsonSyntaxException
 import com.home.cocktailapp.api.CocktailApi
@@ -121,12 +120,15 @@ class CocktailsRepository @Inject constructor(
         saveFetchResult = { response ->
             if (!response.isNullOrEmpty()) {
                 val favoritedCocktails = cocktailDao.getAllFavoritedCocktails().first()
-
                 val cocktails = response.map { serverCocktail ->
                     val isFavorited = favoritedCocktails.any { favoritedCocktail ->
                         favoritedCocktail.cocktailId == serverCocktail.idDrink
                     }
-                    serverCocktail.toCocktails(isFavorited)
+                    if (searchQueryTypeFlow.first().searchQueryType == SearchQueryType.SEARCH_COCKTAILS_BY_INGREDIENT) {
+                        insertCocktailById(serverCocktail.idDrink, isFavorited)
+                    } else {
+                        serverCocktail.toCocktails(isFavorited)
+                    }
                 }
 
                 val searchResults = response.map {
@@ -183,24 +185,11 @@ class CocktailsRepository @Inject constructor(
         cocktailDao.deleteNonFavoritedCocktailsOlderThan(timestamp)
     }
 
-    suspend fun getCocktailById(id: String): Cocktails {
-        return cocktailDao.getCocktailByID(id)
-    }
-
-    suspend fun insertCocktailById(id: String): Boolean {
-        val favoritedCocktails = cocktailDao.getAllFavoritedCocktails().first()
-        val response = api.getCocktailByID(id)
-        val serverCocktail = response.drinks!!.map { serverCocktail ->
-            val isFavorited = favoritedCocktails.any { favoritedCocktail ->
-                favoritedCocktail.cocktailId == serverCocktail.idDrink
-            }
+    private suspend fun insertCocktailById(id: String, isFavorited: Boolean): Cocktails {
+        val response = api.getCocktailByID(id).drinks
+        val serverCocktail = response?.map { serverCocktail ->
             serverCocktail.toCocktails(isFavorited)
         }
-        database.withTransaction {
-            serverCocktail.let {
-                cocktailDao.insertCocktails(it)
-            }
-        }
-        return true
+        return (serverCocktail?.first() ?: serverCocktail) as Cocktails
     }
 }

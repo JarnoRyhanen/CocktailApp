@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.home.cocktailapp.data.CocktailFilter
 import com.home.cocktailapp.data.Cocktails
-import com.home.cocktailapp.data.CocktailsRepository
+import com.home.cocktailapp.data.repositories.CocktailsRepository
 import com.home.cocktailapp.data.PreferencesManager
 import com.home.cocktailapp.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel

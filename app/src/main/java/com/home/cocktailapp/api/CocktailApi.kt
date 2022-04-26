@@ -1,7 +1,7 @@
 package com.home.cocktailapp.api
 
 import com.home.cocktailapp.BuildConfig
-import com.home.cocktailapp.api.response.CocktailIngredientResponse
+import com.home.cocktailapp.api.response.IngredientResponse
 import com.home.cocktailapp.api.response.CocktailResponse
 import retrofit2.http.GET
 import retrofit2.http.Headers
@@ -34,7 +34,7 @@ interface CocktailApi {
     @GET("search.php")
     suspend fun searchIngredientInfo(
         @Query("i") query: String
-    ) : CocktailIngredientResponse
+    ) : IngredientResponse
 
     // search drinks by ingredient returns only 3 drink values: strDrink, strDrinkThumb and idDrink
     //todo make new response class and data class if necessary

@@ -1,6 +1,7 @@
-package com.home.cocktailapp.data
+package com.home.cocktailapp.data.database
 
 import androidx.room.*
+import com.home.cocktailapp.data.*
 import kotlinx.coroutines.flow.Flow
 
 @Dao

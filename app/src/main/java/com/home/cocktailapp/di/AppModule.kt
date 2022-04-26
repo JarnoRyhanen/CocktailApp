@@ -3,7 +3,7 @@ package com.home.cocktailapp.di
 import android.app.Application
 import androidx.room.Room
 import com.home.cocktailapp.api.CocktailApi
-import com.home.cocktailapp.data.CocktailDatabase
+import com.home.cocktailapp.data.database.CocktailDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

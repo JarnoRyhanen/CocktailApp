@@ -1,9 +1,11 @@
-package com.home.cocktailapp.data
+package com.home.cocktailapp.data.repositories
 
 import androidx.room.withTransaction
 import com.google.gson.JsonSyntaxException
 import com.home.cocktailapp.api.CocktailApi
 import com.home.cocktailapp.api.dto.toCocktails
+import com.home.cocktailapp.data.*
+import com.home.cocktailapp.data.database.CocktailDatabase
 import com.home.cocktailapp.util.Resource
 import com.home.cocktailapp.util.exhaustive
 import com.home.cocktailapp.util.networkBoundResource

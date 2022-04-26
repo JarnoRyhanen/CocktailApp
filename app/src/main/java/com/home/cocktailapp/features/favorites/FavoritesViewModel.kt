@@ -3,7 +3,7 @@ package com.home.cocktailapp.features.favorites
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.home.cocktailapp.data.Cocktails
-import com.home.cocktailapp.data.CocktailsRepository
+import com.home.cocktailapp.data.repositories.CocktailsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn

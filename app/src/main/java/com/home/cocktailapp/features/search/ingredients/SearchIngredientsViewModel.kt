@@ -1,7 +1,7 @@
 package com.home.cocktailapp.features.search.ingredients
 
 import androidx.lifecycle.ViewModel
-import com.home.cocktailapp.data.CocktailsRepository
+import com.home.cocktailapp.data.repositories.CocktailsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

@@ -18,12 +18,6 @@
         app:showAsAction="never"
         />
     <item
-        android:id="@+id/action_search_ingredient"
-        android:title="@string/search_ingredient"
-        app:showAsAction="never"
-        />
-
-    <item
         android:id="@+id/action_search_cocktail_by_ingredient"
         android:title="@string/search_cocktail_by_ingredient"
         app:showAsAction="never"

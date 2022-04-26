@@ -1,4 +1,4 @@
-package com.home.cocktailapp.features.search
+package com.home.cocktailapp.features.search.cocktails
 
 import android.os.Bundle
 import android.util.Log
@@ -22,7 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 
 @AndroidEntryPoint
-class SearchFragment() : Fragment(R.layout.fragment_search) {
+class SearchFragment : Fragment(R.layout.fragment_search) {
 
     private val viewModel: SearchViewModel by viewModels()
 
@@ -165,9 +165,6 @@ class SearchFragment() : Fragment(R.layout.fragment_search) {
         when (item.itemId) {
             R.id.action_search_cocktail -> {
                 viewModel.onSearchQueryTypeSelected(SearchQueryType.SEARCH_COCKTAILS)
-                true
-            }
-            R.id.action_search_ingredient -> {
                 true
             }
             R.id.action_search_cocktail_by_ingredient -> {

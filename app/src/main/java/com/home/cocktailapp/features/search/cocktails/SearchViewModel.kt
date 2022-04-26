@@ -1,4 +1,4 @@
-package com.home.cocktailapp.features.search
+package com.home.cocktailapp.features.search.cocktails
 
 import android.util.Log
 import androidx.lifecycle.ViewModel

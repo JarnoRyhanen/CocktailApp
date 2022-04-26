@@ -16,14 +16,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.home.cocktailapp.R
 import com.home.cocktailapp.data.SearchQueryType
 import com.home.cocktailapp.databinding.FragmentSearchBinding
-import com.home.cocktailapp.features.home.HomeFragmentDirections
 import com.home.cocktailapp.shared.CocktailListAdapter
 import com.home.cocktailapp.util.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class SearchFragment : Fragment(R.layout.fragment_search) {
+class SearchFragment() : Fragment(R.layout.fragment_search) {
 
     private val viewModel: SearchViewModel by viewModels()
 
@@ -32,14 +32,29 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
     private lateinit var searchAdapter: CocktailListAdapter
 
+    private var openFragment: Boolean = false
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         currentBinding = FragmentSearchBinding.bind(view)
 
-        searchAdapter = CocktailListAdapter(onItemClick = { cocktails ->
-            val action = SearchFragmentDirections.actionSearchFragmentToDetailsFragment(cocktails)
-            findNavController().navigate(action)
-        },
+        searchAdapter = CocktailListAdapter(
+            onItemClick = { cocktails ->
+                lifecycleScope.launch {
+                    val searchQueryType = viewModel.getPreferences()
+                    if (searchQueryType == SearchQueryType.SEARCH_COCKTAILS_BY_INGREDIENT) {
+                        if (viewModel.insertCocktailById(cocktails.cocktailId)) openFragment = true
+                    } else {
+                        openFragment = true
+                    }
+                }
+                if (openFragment) {
+                    val action =
+                        SearchFragmentDirections.actionSearchFragmentToDetailsFragment(cocktails)
+                    findNavController().navigate(action)
+                    openFragment = false
+                }
+            },
             onFavoriteClick = { cocktail ->
                 viewModel.onFavoriteClick(cocktail)
             })

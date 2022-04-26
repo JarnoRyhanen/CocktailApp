@@ -1,7 +1,8 @@
 package com.home.cocktailapp.api
 
 import com.home.cocktailapp.BuildConfig
-import kotlinx.coroutines.flow.MutableStateFlow
+import com.home.cocktailapp.api.response.CocktailIngredientResponse
+import com.home.cocktailapp.api.response.CocktailResponse
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Path
@@ -40,6 +41,12 @@ interface CocktailApi {
     @Headers("X-RapidAPI-Host: the-cocktail-db.p.rapidapi.com", "X-RapidAPI-Key: $API_KEY")
     @GET("filter.php")
     suspend fun searchDrinksByIngredient(
+        @Query("i") query: String
+    ): CocktailResponse
+
+    @Headers("X-RapidAPI-Host: the-cocktail-db.p.rapidapi.com", "X-RapidAPI-Key: $API_KEY")
+    @GET("lookup.php")
+    suspend fun getCocktailByID(
         @Query("i") query: String
     ): CocktailResponse
 

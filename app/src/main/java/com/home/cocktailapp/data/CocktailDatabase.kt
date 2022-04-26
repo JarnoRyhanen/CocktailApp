@@ -5,7 +5,7 @@ import androidx.room.RoomDatabase
 
 @Database(entities = [Cocktails::class, PopularCocktails::class,
     RandomCocktails::class, LatestCocktails::class, SearchResult::class, SearchResultByIngredient::class],
-    version = 1)
+    version = 2)
 abstract class CocktailDatabase : RoomDatabase() {
 
     abstract fun cocktailDao(): CocktailDao

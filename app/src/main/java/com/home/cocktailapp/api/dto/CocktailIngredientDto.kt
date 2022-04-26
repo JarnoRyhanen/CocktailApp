@@ -1,4 +1,4 @@
-package com.home.cocktailapp.api
+package com.home.cocktailapp.api.dto
 
 data class CocktailIngredientDto(
     val idIngredient: Int,

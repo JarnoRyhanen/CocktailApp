@@ -3,10 +3,7 @@ package com.home.cocktailapp.features.search
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.home.cocktailapp.data.Cocktails
-import com.home.cocktailapp.data.CocktailsRepository
-import com.home.cocktailapp.data.PreferencesManager
-import com.home.cocktailapp.data.SearchQueryType
+import com.home.cocktailapp.data.*
 import com.home.cocktailapp.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -59,14 +56,6 @@ class SearchViewModel @Inject constructor(
         pendingScrollToTopAfterNewQuery = true
     }
 
-    fun onNormalRefresh() {
-        if (searchResults.value !is Resource.Loading) {
-            viewModelScope.launch {
-                refreshTriggerChannel.send(Refresh.NORMAL)
-            }
-        }
-    }
-
     fun onManualRefresh() {
         if (searchResults.value !is Resource.Loading) {
             viewModelScope.launch {
@@ -92,6 +81,12 @@ class SearchViewModel @Inject constructor(
 
     enum class Refresh {
         FORCE, NORMAL
+    }
+    suspend fun insertCocktailById(id: String): Boolean {
+       return repository.insertCocktailById(id)
+    }
+    suspend fun getPreferences(): SearchQueryType {
+        return preferencesManager.searchQueryTypeFlow.first().searchQueryType
     }
 
     sealed class Event {

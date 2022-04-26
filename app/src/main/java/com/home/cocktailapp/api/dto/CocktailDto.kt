@@ -1,9 +1,8 @@
-package com.home.cocktailapp.api
+package com.home.cocktailapp.api.dto
 
 import com.home.cocktailapp.data.Cocktails
 
 data class CocktailDto(
-
     val idDrink: String,
     val strDrink: String,
     val strInstructions: String,

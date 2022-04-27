@@ -12,6 +12,7 @@
     <string name="could_not_load_search_results">Could not load search results: %s</string>
     <string name="random">Random</string>
     <string name="retry">retry</string>
+    <string name="no_description_found">No description found for: \n %s</string>
     <string name="press_the_stars_to_save_your_favorite_here">Press the stars to save your favorites here</string>
     <string name="delete_all_favorites">Delete all favorites</string>
     <string name="search_instructions">Tap the magnifying glass to start searching</string>

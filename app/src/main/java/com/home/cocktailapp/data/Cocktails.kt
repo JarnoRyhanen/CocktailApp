@@ -51,16 +51,6 @@ data class Cocktails(
     val drinkMeasure15: String? = null
 ) : Parcelable
 
-@Entity(tableName = "search_result_by_ingredient")
-data class SearchResultByIngredient(
-    val drinkId: String,
-    val drinkThumbnail: String,
-    val name: String,
-    val isFavourited: Boolean,
-    val searchQuery: String,
-    @PrimaryKey(autoGenerate = true) val id: Int = 0
-)
-
 @Entity(tableName = "search_results", primaryKeys = ["searchQuery","drinkId"])
 data class SearchResult(
     val searchQuery: String,

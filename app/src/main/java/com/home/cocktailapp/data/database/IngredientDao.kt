@@ -22,4 +22,7 @@ interface IngredientDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSearchIngredientResults(searchResult: List<IngredientSearchResult>)
 
+    @Query("DELETE FROM ingredient_search_result WHERE searchQuery = :query")
+    suspend fun deleteSearchResultForQuery(query: String)
+
 }

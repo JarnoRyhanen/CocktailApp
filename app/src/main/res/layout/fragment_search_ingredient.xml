@@ -19,6 +19,17 @@
                 tools:listitem="@layout/recycler_view_ingredient"
                 />
 
+            <Button
+                android:id="@+id/button_retry"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/text_view_error"
+                android:layout_centerInParent="true"
+                android:text="@string/retry"
+                android:visibility="gone"
+                tools:visibility="visible"
+                />
+
             <ProgressBar
                 android:id="@+id/progress_bar"
                 android:layout_width="wrap_content"

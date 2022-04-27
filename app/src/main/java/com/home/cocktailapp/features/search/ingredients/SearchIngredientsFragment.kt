@@ -43,12 +43,14 @@ class SearchIngredientsFragment : Fragment(R.layout.fragment_search_ingredient) 
                     when (result) {
                         is Resource.Loading -> {
                             progressBar.isVisible = true
+                            buttonRetry.isVisible = false
                             textViewInstructions.isVisible = false
                             textViewError.isVisible = false
                             textViewNoResults.isVisible = false
                             recyclerView.visibility = View.INVISIBLE
                         }
                         is Resource.Success -> {
+                            buttonRetry.isVisible = false
                             textViewInstructions.isVisible = false
                             textViewError.isVisible = false
                             progressBar.isVisible = false
@@ -67,8 +69,9 @@ class SearchIngredientsFragment : Fragment(R.layout.fragment_search_ingredient) 
 
                             val noCachedResults =
                                 searchAdapter.itemCount < 1 && result.data.isNullOrEmpty()
-                            textViewError.isVisible = noCachedResults
+                            buttonRetry.isVisible = noCachedResults
 
+                            textViewError.isVisible = noCachedResults
                             val errorMessage = getString(
                                 R.string.could_not_load_search_results,
                                 result.error?.localizedMessage ?: R.string.unknown_error_occured
@@ -80,6 +83,10 @@ class SearchIngredientsFragment : Fragment(R.layout.fragment_search_ingredient) 
                 }
             }
             textViewInstructions.isVisible = true
+
+            buttonRetry.setOnClickListener {
+                viewModel.onManualRefresh()
+            }
         }
         setHasOptionsMenu(true)
     }

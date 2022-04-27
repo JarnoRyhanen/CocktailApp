@@ -1,6 +1,5 @@
 package com.home.cocktailapp.data.repositories
 
-import android.util.Log
 import androidx.room.withTransaction
 import com.home.cocktailapp.api.CocktailApi
 import com.home.cocktailapp.api.dto.toIngredient
@@ -13,8 +12,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import javax.inject.Inject
-
-private const val TAG = "IngredientRepository"
 
 class IngredientRepository @Inject constructor(
     private val api: CocktailApi,
@@ -49,6 +46,7 @@ class IngredientRepository @Inject constructor(
                         )
                     }
                     database.withTransaction {
+                        ingredientDao.deleteSearchResultForQuery(searchQuery.value)
                         ingredientDao.insertIngredient(ingredient)
                         ingredientDao.insertSearchIngredientResults(searchResult)
                     }
@@ -58,6 +56,4 @@ class IngredientRepository @Inject constructor(
                 forceRefresh
             }
         )
-
-
 }

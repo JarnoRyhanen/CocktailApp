@@ -1,6 +1,5 @@
 package com.home.cocktailapp.features.search.cocktails
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.home.cocktailapp.data.Cocktails
@@ -80,7 +79,7 @@ class SearchViewModel @Inject constructor(
     }
 
     enum class Refresh {
-        FORCE, NORMAL
+        FORCE,
     }
 
     sealed class Event {

@@ -12,14 +12,12 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.home.cocktailapp.R
 import com.home.cocktailapp.data.CocktailFilter
 import com.home.cocktailapp.databinding.FragmentHomeBinding
 import com.home.cocktailapp.shared.CocktailListAdapter
 import com.home.cocktailapp.util.Resource
 import com.home.cocktailapp.util.exhaustive
-import com.home.cocktailapp.util.showIfOrInvisible
 import com.home.cocktailapp.util.showSnackbar
 import dagger.hilt.android.AndroidEntryPoint
 

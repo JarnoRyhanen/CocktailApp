@@ -13,7 +13,6 @@
         >
 
         <ProgressBar
-            android:id="@+id/progress_bar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -69,7 +68,6 @@
             >
 
             <TextView
-                android:id="@+id/ingredient_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
@@ -80,7 +78,6 @@
                 />
 
             <TextView
-                android:id="@+id/measure_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
@@ -100,7 +97,6 @@
             >
 
             <TextView
-                android:id="@+id/ingredient_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
@@ -111,7 +107,6 @@
                 />
 
             <TextView
-                android:id="@+id/measure_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
@@ -131,7 +126,6 @@
             >
 
             <TextView
-                android:id="@+id/ingredient_3"
                 android:layout_width="wrap_content"
                 android:visibility="gone"
                 tools:visibility="visible"
@@ -142,7 +136,6 @@
                 />
 
             <TextView
-                android:id="@+id/measure_3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
@@ -163,7 +156,6 @@
             >
 
             <TextView
-                android:id="@+id/ingredient_4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
@@ -174,7 +166,6 @@
                 />
 
             <TextView
-                android:id="@+id/measure_4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
@@ -194,7 +185,6 @@
             >
 
             <TextView
-                android:id="@+id/ingredient_5"
                 android:layout_width="wrap_content"
                 android:visibility="gone"
                 tools:visibility="visible"
@@ -205,7 +195,6 @@
                 />
 
             <TextView
-                android:id="@+id/measure_5"
                 android:layout_width="wrap_content"
                 android:visibility="gone"
                 tools:visibility="visible"
@@ -225,7 +214,6 @@
             >
 
             <TextView
-                android:id="@+id/ingredient_6"
                 android:layout_width="wrap_content"
                 android:visibility="gone"
                 tools:visibility="visible"
@@ -236,7 +224,6 @@
                 />
 
             <TextView
-                android:id="@+id/measure_6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
@@ -256,7 +243,6 @@
             >
 
             <TextView
-                android:id="@+id/ingredient_7"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
@@ -267,7 +253,6 @@
                 />
 
             <TextView
-                android:id="@+id/measure_7"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
@@ -286,7 +271,6 @@
             >
 
             <TextView
-                android:id="@+id/ingredient_8"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
@@ -297,7 +281,6 @@
                 />
 
             <TextView
-                android:id="@+id/measure_8"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
@@ -317,7 +300,6 @@
             >
 
             <TextView
-                android:id="@+id/ingredient_9"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
@@ -328,7 +310,6 @@
                 />
 
             <TextView
-                android:id="@+id/measure_9"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
@@ -348,7 +329,6 @@
             >
 
             <TextView
-                android:id="@+id/ingredient_10"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
@@ -359,7 +339,6 @@
                 />
 
             <TextView
-                android:id="@+id/measure_10"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
@@ -379,7 +358,6 @@
             >
 
             <TextView
-                android:id="@+id/ingredient_11"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
@@ -390,7 +368,6 @@
                 />
 
             <TextView
-                android:id="@+id/measure_11"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
@@ -410,7 +387,6 @@
             >
 
             <TextView
-                android:id="@+id/ingredient_12"
                 android:layout_width="wrap_content"
                 android:visibility="gone"
                 tools:visibility="visible"
@@ -421,7 +397,6 @@
                 />
 
             <TextView
-                android:id="@+id/measure_12"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
@@ -441,7 +416,6 @@
             >
 
             <TextView
-                android:id="@+id/ingredient_13"
                 android:layout_width="wrap_content"
                 android:visibility="gone"
                 tools:visibility="visible"
@@ -452,7 +426,6 @@
                 />
 
             <TextView
-                android:id="@+id/measure_13"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
@@ -472,7 +445,6 @@
             >
 
             <TextView
-                android:id="@+id/ingredient_14"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
@@ -483,7 +455,6 @@
                 />
 
             <TextView
-                android:id="@+id/measure_14"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
@@ -503,7 +474,6 @@
             >
 
             <TextView
-                android:id="@+id/ingredient_15"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
@@ -514,7 +484,6 @@
                 />
 
             <TextView
-                android:id="@+id/measure_15"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"

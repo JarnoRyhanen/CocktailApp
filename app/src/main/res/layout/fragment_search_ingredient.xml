@@ -13,14 +13,12 @@
             >
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 tools:listitem="@layout/recycler_view_ingredient"
                 />
 
             <Button
-                android:id="@+id/button_retry"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/text_view_error"
@@ -31,7 +29,6 @@
                 />
 
             <ProgressBar
-                android:id="@+id/progress_bar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
@@ -52,7 +49,6 @@
                 />
 
             <TextView
-                android:id="@+id/text_view_no_results"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
@@ -62,7 +58,6 @@
                 />
 
             <TextView
-                android:id="@+id/text_view_instructions"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"

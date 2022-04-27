@@ -6,7 +6,6 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.home.cocktailapp.data.Ingredient
 import com.home.cocktailapp.data.IngredientSearchResult
-import com.home.cocktailapp.data.SearchResult
 import kotlinx.coroutines.flow.Flow
 
 @Dao

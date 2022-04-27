@@ -23,7 +23,6 @@
             />
 
         <TextView
-            android:id="@+id/ingredient_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/ingredient_name"
@@ -35,7 +34,6 @@
 
         <TextView
             android:layout_below="@id/ingredient_name"
-            android:id="@+id/ingredient_description_not_found"
             android:layout_centerInParent="true"
             android:textSize="24sp"
             android:layout_margin="24dp"

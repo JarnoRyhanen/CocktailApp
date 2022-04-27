@@ -18,6 +18,7 @@ import com.home.cocktailapp.databinding.FragmentHomeBinding
 import com.home.cocktailapp.shared.CocktailListAdapter
 import com.home.cocktailapp.util.Resource
 import com.home.cocktailapp.util.exhaustive
+import com.home.cocktailapp.util.showIfOrInvisible
 import com.home.cocktailapp.util.showSnackbar
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -51,15 +52,42 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 viewModel.drinksByQuery.collect {
                     val result = it ?: return@collect
                     Log.d("tag", "onViewCreated: ${result.data?.size}")
-                    swipeRefreshLayout.isRefreshing = result is Resource.Loading
-                    recyclerView.isVisible = !result.data.isNullOrEmpty()
-                    textViewError.isVisible = result.error != null && result.data.isNullOrEmpty()
-                    textViewError.text = getString(
-                        R.string.could_not_refresh,
-                        result.error?.localizedMessage ?: getString(R.string.unknown_error_occured)
-                    )
-                    buttonRetry.isVisible = result.error != null && result.data.isNullOrEmpty()
 
+                    when (result) {
+                        is Resource.Loading -> {
+                            buttonRetry.isVisible = false
+                            textViewError.isVisible = false
+                            swipeRefreshLayout.isRefreshing = true
+                        }
+                        is Resource.Success -> {
+                            buttonRetry.isVisible = false
+                            textViewError.isVisible = false
+                            swipeRefreshLayout.isRefreshing = false
+                            recyclerView.isVisible =
+                                cocktailAdapter.itemCount > 0 || !result.data.isNullOrEmpty()
+                        }
+                        is Resource.Error -> {
+                            swipeRefreshLayout.isRefreshing = false
+                            recyclerView.isVisible = cocktailAdapter.itemCount > 0
+                            
+                            val noCachedResults =
+                                cocktailAdapter.itemCount < 1 && result.data.isNullOrEmpty()
+                            textViewError.isVisible = noCachedResults
+
+                            viewModel.pendingScrollToTopAfterRefresh = false
+
+                            if (viewModel.getPreferences() == CocktailFilter.RANDOMSELECTION) {
+                                recyclerView.isVisible = false
+                                textViewError.isVisible = true
+                                buttonRetry.isVisible = true
+                            }
+                            val errorMessage = getString(
+                                R.string.could_not_load_search_results,
+                                result.error?.localizedMessage ?: R.string.unknown_error_occured
+                            )
+                            textViewError.text = errorMessage
+                        }
+                    }
                     cocktailAdapter.submitList(result.data) {
                         if (viewModel.pendingScrollToTopAfterRefresh) {
                             recyclerView.scrollToPosition(0)

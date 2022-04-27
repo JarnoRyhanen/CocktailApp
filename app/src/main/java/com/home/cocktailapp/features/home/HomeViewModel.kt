@@ -4,15 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.home.cocktailapp.data.CocktailFilter
 import com.home.cocktailapp.data.Cocktails
-import com.home.cocktailapp.data.repositories.CocktailsRepository
 import com.home.cocktailapp.data.PreferencesManager
+import com.home.cocktailapp.data.repositories.CocktailsRepository
 import com.home.cocktailapp.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -79,6 +76,10 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             repository.updateCocktail(updatedCocktail)
         }
+    }
+
+    suspend fun getPreferences(): CocktailFilter {
+        return preferencesFlow.first().cocktailFilter
     }
 
     enum class Refresh {

@@ -58,6 +58,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                     Log.d("tag", "onViewCreated: ${result.data?.size}")
                     when (result) {
                         is Resource.Loading -> {
+                            buttonRetry.isVisible = false
                             textViewError.isVisible = false
                             textViewNoResults.isVisible = false
                             swipeRefreshLayout.isRefreshing = true
@@ -69,6 +70,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                             viewModel.pendingScrollToTopAfterRefresh = true
                         }
                         is Resource.Success -> {
+                            buttonRetry.isVisible = false
                             textViewError.isVisible = false
                             swipeRefreshLayout.isRefreshing = false
                             recyclerView.isVisible =
@@ -88,7 +90,9 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
                             val noCachedResults =
                                 searchAdapter.itemCount < 1 && result.data.isNullOrEmpty()
+
                             textViewError.isVisible = noCachedResults
+                            buttonRetry.isVisible = noCachedResults
 
                             val errorMessage = getString(
                                 R.string.could_not_load_search_results,
@@ -128,6 +132,9 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             }
 
             swipeRefreshLayout.setOnRefreshListener {
+                viewModel.onManualRefresh()
+            }
+            buttonRetry.setOnClickListener {
                 viewModel.onManualRefresh()
             }
         }

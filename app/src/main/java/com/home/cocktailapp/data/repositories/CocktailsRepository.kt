@@ -1,5 +1,6 @@
 package com.home.cocktailapp.data.repositories
 
+import android.util.Log
 import androidx.room.withTransaction
 import com.google.gson.JsonSyntaxException
 import com.home.cocktailapp.api.CocktailApi
@@ -7,7 +8,6 @@ import com.home.cocktailapp.api.dto.toCocktails
 import com.home.cocktailapp.data.*
 import com.home.cocktailapp.data.database.CocktailDatabase
 import com.home.cocktailapp.util.Resource
-import com.home.cocktailapp.util.exhaustive
 import com.home.cocktailapp.util.networkBoundResource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -108,19 +108,19 @@ class CocktailsRepository @Inject constructor(
             searchedCocktails
         },
         fetch = {
-            when (searchQueryTypeFlow.first().searchQueryType) {
+            val response = when (searchQueryTypeFlow.first().searchQueryType) {
                 SearchQueryType.SEARCH_COCKTAILS -> {
-                    val response = searchQuery.value?.let { api.searchDrinks(it) }
-                    response?.drinks
+                    searchQuery.value?.let { api.searchDrinks(it) }?.drinks
                 }
                 SearchQueryType.SEARCH_COCKTAILS_BY_INGREDIENT -> {
-                    val response = searchQuery.value?.let { api.searchDrinksByIngredient(it) }
-                    response?.drinks
+                    searchQuery.value?.let { api.searchDrinksByIngredient(it) }?.drinks
                 }
-            }.exhaustive
+            }
+            response
         },
         saveFetchResult = { response ->
             if (!response.isNullOrEmpty()) {
+                Log.d("tag", "getSearchResults:    the search query was new")
                 val favoritedCocktails = cocktailDao.getAllFavoritedCocktails().first()
                 val cocktails = response.map { serverCocktail ->
                     val isFavorited = favoritedCocktails.any { favoritedCocktail ->
@@ -136,7 +136,10 @@ class CocktailsRepository @Inject constructor(
                 val searchResults = response.map {
                     val cocktail = it
                     searchQuery.value?.let { searchQuery ->
-                        SearchResult(searchQuery, drinkId = cocktail.idDrink)
+                        SearchResult(
+                            searchQuery,
+                            drinkId = cocktail.idDrink
+                        )
                     }
                 }
                 database.withTransaction {

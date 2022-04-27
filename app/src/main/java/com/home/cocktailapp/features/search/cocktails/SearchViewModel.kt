@@ -3,7 +3,9 @@ package com.home.cocktailapp.features.search.cocktails
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.home.cocktailapp.data.*
+import com.home.cocktailapp.data.Cocktails
+import com.home.cocktailapp.data.PreferencesManager
+import com.home.cocktailapp.data.SearchQueryType
 import com.home.cocktailapp.data.repositories.CocktailsRepository
 import com.home.cocktailapp.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel

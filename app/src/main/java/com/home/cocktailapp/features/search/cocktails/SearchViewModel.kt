@@ -14,12 +14,10 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-private const val TAG = "SearchViewModel"
-
 @HiltViewModel
 class SearchViewModel @Inject constructor(
     private val repository: CocktailsRepository,
-    private val preferencesManager: PreferencesManager
+    private val preferencesManager: PreferencesManager,
 ) : ViewModel() {
 
     private val searchQuery = MutableStateFlow<String?>(null)
@@ -70,7 +68,6 @@ class SearchViewModel @Inject constructor(
     fun onSearchQueryTypeSelected(searchQueryType: SearchQueryType) {
         viewModelScope.launch {
             preferencesManager.updateSearchQueryType(searchQueryType)
-            Log.d(TAG, "onSearchQueryTypeSelected: ")
         }
     }
 

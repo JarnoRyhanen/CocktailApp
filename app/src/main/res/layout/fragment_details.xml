@@ -13,6 +13,7 @@
         >
 
         <ProgressBar
+            android:id="@+id/progress_bar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -53,450 +54,480 @@
             tools:visibility="visible"
             />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/text_view_drink_instructions"
-        android:layout_margin="8dp"
-        android:orientation="vertical"
-        >
-
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:layout_below="@id/text_view_drink_instructions"
+            android:layout_margin="8dp"
+            android:orientation="vertical"
             >
 
-            <TextView
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:visibility="gone"
-                tools:visibility="visible"
-                tools:text="Ingredient 1"
-                />
+                android:orientation="horizontal"
+                >
 
-            <TextView
+                <TextView
+                    android:id="@+id/ingredient_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    tools:text="Ingredient 1"
+                    />
+
+                <TextView
+                    android:id="@+id/measure_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    tools:text="Measure 1"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:visibility="gone"
-                tools:visibility="visible"
-                tools:text="Measure 1"
-                />
+                android:orientation="horizontal"
+                >
 
+                <TextView
+                    android:id="@+id/ingredient_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    tools:text="Ingredient 2"
+                    />
+
+                <TextView
+                    android:id="@+id/measure_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:textColor="@color/black"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    android:textSize="16sp"
+                    tools:text="Measure 2"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <TextView
+                    android:id="@+id/ingredient_3"
+                    android:layout_width="wrap_content"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    tools:text="Ingredient 3"
+                    />
+
+                <TextView
+                    android:id="@+id/measure_3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    android:layout_marginStart="24dp"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    tools:text="Measure 3"
+                    />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <TextView
+                    android:id="@+id/ingredient_4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    tools:text="Ingredient 4"
+                    />
+
+                <TextView
+                    android:id="@+id/measure_4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    android:layout_marginStart="24dp"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    tools:text="Measure 4"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <TextView
+                    android:id="@+id/ingredient_5"
+                    android:layout_width="wrap_content"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    tools:text="Ingredient 5"
+                    />
+
+                <TextView
+                    android:id="@+id/measure_5"
+                    android:layout_width="wrap_content"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    tools:text="Measure 5"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <TextView
+                    android:id="@+id/ingredient_6"
+                    android:layout_width="wrap_content"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    tools:text="Ingredient 6"
+                    />
+
+                <TextView
+                    android:id="@+id/measure_6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:textColor="@color/black"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    android:textSize="16sp"
+                    tools:text="Measure 6"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <TextView
+                    android:id="@+id/ingredient_7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    tools:text="Ingredient 7"
+                    />
+
+                <TextView
+                    android:id="@+id/measure_7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    tools:text="Measure 7"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <TextView
+                    android:id="@+id/ingredient_8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    tools:text="Ingredient 8"
+                    />
+
+                <TextView
+                    android:id="@+id/measure_8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    tools:text="Measure 8"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <TextView
+                    android:id="@+id/ingredient_9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    tools:text="Ingredient 9"
+                    />
+
+                <TextView
+                    android:id="@+id/measure_9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    tools:text="Measure 9"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <TextView
+                    android:id="@+id/ingredient_10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    tools:text="Ingredient 10"
+                    />
+
+                <TextView
+                    android:id="@+id/measure_10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    tools:text="Measure 10"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <TextView
+                    android:id="@+id/ingredient_11"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    tools:text="Ingredient 11"
+                    />
+
+                <TextView
+                    android:id="@+id/measure_11"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    tools:text="Measure 11"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <TextView
+                    android:id="@+id/ingredient_12"
+                    android:layout_width="wrap_content"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    tools:text="Ingredient 12"
+                    />
+
+                <TextView
+                    android:id="@+id/measure_12"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:textColor="@color/black"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    android:textSize="16sp"
+                    tools:text="Measure 12"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <TextView
+                    android:id="@+id/ingredient_13"
+                    android:layout_width="wrap_content"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    tools:text="Ingredient 13"
+                    />
+
+                <TextView
+                    android:id="@+id/measure_13"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:textColor="@color/black"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    android:textSize="16sp"
+                    tools:text="Measure 13"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <TextView
+                    android:id="@+id/ingredient_14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    tools:text="Ingredient 14"
+                    />
+
+                <TextView
+                    android:id="@+id/measure_14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    tools:text="Measure 14"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <TextView
+                    android:id="@+id/ingredient_15"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    tools:text="Ingredient 15"
+                    />
+
+                <TextView
+                    android:id="@+id/measure_15"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    tools:text="Measure 15"
+                    />
+
+            </LinearLayout>
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                tools:visibility="visible"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                tools:text="Ingredient 2"
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:textColor="@color/black"
-                android:visibility="gone"
-                tools:visibility="visible"
-                android:textSize="16sp"
-                tools:text="Measure 2"
-                />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:visibility="gone"
-                tools:visibility="visible"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                tools:text="Ingredient 3"
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                tools:visibility="visible"
-                android:layout_marginStart="24dp"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                tools:text="Measure 3"
-                />
-
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                tools:visibility="visible"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                tools:text="Ingredient 4"
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                tools:visibility="visible"
-                android:layout_marginStart="24dp"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                tools:text="Measure 4"
-                />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:visibility="gone"
-                tools:visibility="visible"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                tools:text="Ingredient 5"
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:visibility="gone"
-                tools:visibility="visible"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                tools:text="Measure 5"
-                />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:visibility="gone"
-                tools:visibility="visible"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                tools:text="Ingredient 6"
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:textColor="@color/black"
-                android:visibility="gone"
-                tools:visibility="visible"
-                android:textSize="16sp"
-                tools:text="Measure 6"
-                />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:visibility="gone"
-                tools:visibility="visible"
-                tools:text="Ingredient 7"
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:visibility="gone"
-                tools:visibility="visible"
-                tools:text="Measure 7"
-                />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:visibility="gone"
-                tools:visibility="visible"
-                tools:text="Ingredient 8"
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                tools:text="Measure 8"
-                android:visibility="gone"
-                tools:visibility="visible"
-                />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:visibility="gone"
-                tools:visibility="visible"
-                tools:text="Ingredient 9"
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:visibility="gone"
-                tools:visibility="visible"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                tools:text="Measure 9"
-                />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                tools:visibility="visible"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                tools:text="Ingredient 10"
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:visibility="gone"
-                tools:visibility="visible"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                tools:text="Measure 10"
-                />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                tools:visibility="visible"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                tools:text="Ingredient 11"
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:visibility="gone"
-                tools:visibility="visible"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                tools:text="Measure 11"
-                />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:visibility="gone"
-                tools:visibility="visible"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                tools:text="Ingredient 12"
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:textColor="@color/black"
-                android:visibility="gone"
-                tools:visibility="visible"
-                android:textSize="16sp"
-                tools:text="Measure 12"
-                />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:visibility="gone"
-                tools:visibility="visible"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                tools:text="Ingredient 13"
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:textColor="@color/black"
-                android:visibility="gone"
-                tools:visibility="visible"
-                android:textSize="16sp"
-                tools:text="Measure 13"
-                />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:visibility="gone"
-                tools:visibility="visible"
-                tools:text="Ingredient 14"
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:visibility="gone"
-                tools:visibility="visible"
-                tools:text="Measure 14"
-                />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:visibility="gone"
-                tools:visibility="visible"
-                tools:text="Ingredient 15"
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:visibility="gone"
-                tools:visibility="visible"
-                tools:text="Measure 15"
-                />
-
-        </LinearLayout>
-    </LinearLayout>
-
-</RelativeLayout>
+    </RelativeLayout>
 </ScrollView>
 

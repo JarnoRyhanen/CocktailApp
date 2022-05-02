@@ -113,14 +113,13 @@ class CocktailsRepository @Inject constructor(
                     searchQuery.value?.let { api.searchDrinks(it) }?.drinks
                 }
                 SearchQueryType.SEARCH_COCKTAILS_BY_INGREDIENT -> {
-                    searchQuery.value?.let { api.searchDrinksByIngredient(it) }?.drinks
+                        searchQuery.value?.let { api.searchDrinksByIngredient(it) }?.drinks
                 }
             }
             response
         },
         saveFetchResult = { response ->
-            if (!response.isNullOrEmpty()) {
-                Log.d("tag", "getSearchResults:    the search query was new")
+            if (response != null) {
                 val favoritedCocktails = cocktailDao.getAllFavoritedCocktails().first()
                 val cocktails = response.map { serverCocktail ->
                     val isFavorited = favoritedCocktails.any { favoritedCocktail ->
@@ -166,8 +165,7 @@ class CocktailsRepository @Inject constructor(
         },
         onFetchFailed = { t ->
             if (t !is HttpException && t !is IOException
-                && t !is JsonSyntaxException
-            ) {
+                && t !is JsonSyntaxException) {
                 throw t
             }
             onFetchFailed(t)
